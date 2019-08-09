@@ -3,7 +3,6 @@
 import { JSDOM } from "jsdom";
 
 import { select } from "d3-selection";
-import { fs } from "fs";
 
 export function svg(
   generator: (selection: any) => void,
