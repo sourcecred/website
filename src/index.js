@@ -2,8 +2,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { type LogoSettings } from "./logo";
-import { Logo } from "./logoComponent";
+import { logo, type LogoSettings } from "./logo";
+import { Wrapper } from "./wrapper";
 
 const canonicalLogo: LogoSettings = {
   baseCollapse: [1],
@@ -41,14 +41,8 @@ const logos = [canonicalLogo, otherCoolLogo];
 export class Main extends React.Component<{}> {
   render() {
     return (
-      <svg width="1125" height="2436">
-        <Logo
-          x={(1125 - 1024) / 2}
-          y={(2436 - 1024) / 2}
-          size={1024}
-          settings={otherCoolLogo}
-        />
-        ;
+      <svg width="600" height="600">
+        <Wrapper x={50} y={50} generator={g => logo(g, 512)} />
       </svg>
     );
   }
