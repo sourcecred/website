@@ -80,9 +80,10 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     edge: edge * edgeCollapse[i % edgeCollapse.length]
   }));
 
-  const stacked = stack().keys(["base", "mid", "edge"])(data);
+  const layers = ["base", "mid", "edge"];
+  const stacked = stack().keys(layers)(data);
   const color = scaleOrdinal()
-    .domain(["base", "mid", "edge"])
+    .domain(layers)
     .range([baseColor, midColor, edgeColor]);
 
   const width = ((2 * Math.PI) / nRays) * rayWidth;
