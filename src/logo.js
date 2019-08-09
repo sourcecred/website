@@ -6,10 +6,13 @@ import { select } from "d3-selection";
 import { arc as d3Arc } from "d3-shape";
 
 export type Props = {|
-  size: number
+  size: number,
+  settings: LogoSettings,
+  x: number,
+  y: number
 |};
 
-type LogoSettings = {|
+export type LogoSettings = {|
   edgeCollapse: number[],
   midCollapse: number[],
   baseCollapse: number[],
@@ -29,10 +32,10 @@ type LogoSettings = {|
 |};
 
 const defaultSettings: LogoSettings = {
-  pupil: 0.35,
-  base: 0.45,
-  mid: 0.7,
-  edge: 0.9,
+  pupil: 0.4,
+  base: 0.5,
+  mid: 0.8,
+  edge: 0.97,
 
   baseCollapse: spiralLength(36),
   midCollapse: spiralLength(18),
@@ -76,6 +79,8 @@ function logo(g, size: number, settings) {
   internal
     .append("circle")
     .attr("fill", backgroundColor)
+    .attr("stroke", "#3f6385")
+    .attr("stroke-width", 2)
     .attr("r", backgroundRadius);
 
   for (let i = 0; i < nRays; i++) {
@@ -107,14 +112,12 @@ function logo(g, size: number, settings) {
 
 export class Logo extends React.Component<Props> {
   componentDidMount() {
-    const svg = select(ReactDOM.findDOMNode(this));
-    logo(svg, this.props.size, defaultSettings);
+    const g = select(ReactDOM.findDOMNode(this));
+    logo(g, this.props.size, this.props.settings);
   }
 
   render() {
-    return (
-      <svg width={this.props.size + "px"} height={this.props.size + "px"} />
-    );
+    return <g transform={`translate(${this.props.x}, ${this.props.y})`} />;
   }
 }
 
