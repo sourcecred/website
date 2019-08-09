@@ -2,7 +2,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { Logo, type LogoSettings } from "./logo";
+import { type LogoSettings } from "./logo";
+import { Logo } from "./logoComponent";
 
 const canonicalLogo: LogoSettings = {
   baseCollapse: [1],

@@ -5,13 +5,6 @@ import ReactDOM from "react-dom";
 import { select } from "d3-selection";
 import { arc as d3Arc } from "d3-shape";
 
-export type Props = {|
-  size: number,
-  settings: LogoSettings,
-  x: number,
-  y: number
-|};
-
 export type LogoSettings = {|
   edgeCollapse: number[],
   midCollapse: number[],
@@ -48,7 +41,8 @@ const defaultSettings: LogoSettings = {
   edgeColor: "#87738c"
 };
 
-function logo(g, size: number, settings) {
+export function logo(g: any, size: number, settings: ?LogoSettings) {
+  if (settings == null) settings = defaultSettings;
   const {
     pupil,
     base,
@@ -107,17 +101,6 @@ function logo(g, size: number, settings) {
     addArc(pupilRadius, actualBaseRadius, baseColor);
     addArc(actualBaseRadius, actualMidRadius, midColor);
     addArc(actualMidRadius, actualEdgeRadius, edgeColor);
-  }
-}
-
-export class Logo extends React.Component<Props> {
-  componentDidMount() {
-    const g = select(ReactDOM.findDOMNode(this));
-    logo(g, this.props.size, this.props.settings);
-  }
-
-  render() {
-    return <g transform={`translate(${this.props.x}, ${this.props.y})`} />;
   }
 }
 
