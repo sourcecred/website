@@ -2,30 +2,26 @@
 
 import { JSDOM } from "jsdom";
 
-import { logo } from "./logo";
 import { select } from "d3-selection";
 import { fs } from "fs";
 
-const fakeDom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-let body = select(fakeDom.window.document).select("body");
+export function svg(
+  generator: (selection: any) => void,
+  width: ?number,
+  height: ?number
+): string {
+  const fakeDom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
+  let body = select(fakeDom.window.document).select("body");
 
-// Make an SVG Container
-let svgContainer = body
-  .append("div")
-  .attr("class", "container")
-  .append("svg")
-  .attr("width", 1280)
-  .attr("height", 1024);
+  // Make an SVG Container
+  let container = body.append("div").attr("class", "container");
+  let svg = container.append("svg").attr("xmlns", "http://www.w3.org/2000/svg");
+  if (width) svg.attr("width", width);
+  if (height) svg.attr("height", height);
 
-// Draw a line
-let circle = svgContainer
-  .append("line")
-  .attr("x1", 5)
-  .attr("y1", 5)
-  .attr("x2", 500)
-  .attr("y2", 500)
-  .attr("stroke-width", 2)
-  .attr("stroke", "black");
+  generator(svg);
 
-// Output the result to console
-console.log(body.select(".container").html());
+  const header = `<?xml version="1.0" encoding="UTF-8"?>`;
+  const contents = body.select(".container").html();
+  return `${header}\n${contents}`;
+}
