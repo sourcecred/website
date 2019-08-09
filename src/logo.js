@@ -3,7 +3,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3-selection";
-import { arc as d3Arc } from "d3-shape";
+import { arc as d3Arc, stack } from "d3-shape";
+import { scaleOrdinal } from "d3-scale";
 
 export type LogoSettings = {|
   edgeCollapse: number[],
@@ -26,9 +27,9 @@ export type LogoSettings = {|
 
 const defaultSettings: LogoSettings = {
   pupil: 0.4,
-  base: 0.5,
-  mid: 0.8,
-  edge: 0.97,
+  base: 0.1,
+  mid: 0.2,
+  edge: 0.3,
 
   baseCollapse: spiralLength(36),
   midCollapse: spiralLength(18),
@@ -60,11 +61,6 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
   } = settings;
 
   const backgroundRadius = (size / Math.sqrt(2)) * 0.7;
-  const pupilRadius = pupil * backgroundRadius;
-  const baseRadius = base * backgroundRadius;
-  const midRadius = mid * backgroundRadius;
-  const edgeRadius = edge * backgroundRadius;
-
   const internal = g
     .append("g")
     .attr("transform", `translate(${size / 2}, ${size / 2})`);
@@ -77,31 +73,34 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     .attr("stroke-width", 2)
     .attr("r", backgroundRadius);
 
-  for (let i = 0; i < nRays; i++) {
-    const offset = (i / nRays) * 2 * Math.PI;
-    const w0 = ((2 * Math.PI) / nRays) * rayWidth;
-    const arc = d3Arc()
-      .startAngle(offset)
-      .endAngle(offset + w0);
-    function addArc(innerRadius, outerRadius, color) {
-      internal
-        .append("path")
-        .attr("d", arc({ innerRadius, outerRadius }))
-        .attr("fill", color);
-    }
-    const baseDelta = baseRadius - pupilRadius;
-    const actualBaseRadius =
-      pupilRadius + baseDelta * baseCollapse[i % baseCollapse.length];
-    const midDelta = midRadius - baseRadius;
-    const actualMidRadius =
-      actualBaseRadius + midDelta * midCollapse[i % midCollapse.length];
-    const edgeDelta = edgeRadius - midRadius;
-    const actualEdgeRadius =
-      actualMidRadius + edgeDelta * edgeCollapse[i % edgeCollapse.length];
-    addArc(pupilRadius, actualBaseRadius, baseColor);
-    addArc(actualBaseRadius, actualMidRadius, midColor);
-    addArc(actualMidRadius, actualEdgeRadius, edgeColor);
-  }
+  const data = range(nRays).map(i => ({
+    i,
+    base: base * baseCollapse[i % baseCollapse.length],
+    mid: mid * midCollapse[i % midCollapse.length],
+    edge: edge * edgeCollapse[i % edgeCollapse.length]
+  }));
+
+  const stacked = stack().keys(["base", "mid", "edge"])(data);
+  const color = scaleOrdinal()
+    .domain(["base", "mid", "edge"])
+    .range([baseColor, midColor, edgeColor]);
+
+  const width = ((2 * Math.PI) / nRays) * rayWidth;
+  const arc = d3Arc()
+    .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
+    .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
+    .innerRadius(d => (d[0] + pupil) * backgroundRadius)
+    .outerRadius(d => (d[1] + pupil) * backgroundRadius);
+  internal
+    .append("g")
+    .selectAll("g")
+    .data(stacked)
+    .join("g")
+    .attr("fill", d => color(d.key))
+    .selectAll("rect")
+    .data(d => d)
+    .join("path")
+    .attr("d", arc);
 }
 
 function range(n) {
