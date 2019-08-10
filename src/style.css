@@ -1,5 +1,5 @@
   svg {background-color: #20364a}
-  #target {
+  canvas {
     height: 256px;
     width: 256px;
   }
@@ -7,6 +7,29 @@
     background-color: #0b1219;
     color: #FAD9D4;
     font-family: 'Anonymous';
+    padding: 40px;
+  }
+  .no-bottom-margin {
+    margin-block-end: 0;
+  }
+  .no-top-margin {
+    margin-block-start: 0;
+  }
+  h1 {
+    font-size: 80px;
+  }
+  h2 {
+    font-size: 40px;
+  }
+  h3 {
+    font-size: 30px;
+  }
+  p {
+    font-size: 18px;
+  }
+  .container {
+    max-width: 720px;
+    margin: 20px auto;
   }
   @font-face {
     font-family: "Anonymous";
