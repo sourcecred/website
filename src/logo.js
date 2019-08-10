@@ -34,9 +34,9 @@ const defaultSettings: LogoSettings = {
   mid: 0.2,
   edge: 0.3,
 
-  baseCollapse: spiralLength(36),
-  midCollapse: spiralLength(18),
-  edgeCollapse: spiralLength(9),
+  baseCollapse: spiralLength(36).reverse(),
+  midCollapse: spiralLength(18).reverse(),
+  edgeCollapse: spiralLength(9).reverse(),
   rayWidth: 0.75,
   nRays: 72,
   backgroundColor: "#20364a",
@@ -77,13 +77,22 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     .attr("r", backgroundRadius);
 
   const redraw = offset => {
+    const steps = Math.floor(offset);
+    const remainder = offset - steps;
+
     const data = range(nRays).map(i => {
-      const j = i + (72 - (offset % 72));
+      const j = steps + i;
+      const base0 = baseCollapse[j % baseCollapse.length];
+      const base1 = baseCollapse[(j + 1) % baseCollapse.length];
+      const mid0 = midCollapse[j % midCollapse.length];
+      const mid1 = midCollapse[(j + 1) % midCollapse.length];
+      const edge0 = edgeCollapse[j % edgeCollapse.length];
+      const edge1 = edgeCollapse[(j + 1) % edgeCollapse.length];
       return {
         i,
-        base: base * baseCollapse[j % baseCollapse.length],
-        mid: mid * midCollapse[j % midCollapse.length],
-        edge: edge * edgeCollapse[j % edgeCollapse.length]
+        base: base * interpolate(base0, base1)(remainder),
+        mid: mid * interpolate(mid0, mid1)(remainder),
+        edge: edge * interpolate(edge0, edge1)(remainder)
       };
     });
     console.log(`offset: ${offset}, base: ${data[0].base}`);
@@ -121,10 +130,12 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
         .selectAll(`.ray-${layer}`)
         .data(stacked[layer_index], d => d.data.i + "-" + layer);
 
-      rays
+      rays.attr("d", arc);
+      /*
         .transition()
         .duration(1000)
         .attrTween("d", arcTween(stacked[layer_index]));
+        */
 
       rays
         .enter()
@@ -132,13 +143,13 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
         .each(function(d) {
           this._current = d;
         })
-        //      .attr("d", arc)
+        .attr("d", arc)
         .attr("class", d => `ray-${layer}`)
         .attr("fill", d => color(layer));
     });
   };
   let k = 0;
-  interval(() => redraw((k += 1)), 1000);
+  interval(() => redraw((k += 0.002)), 16);
   redraw(0);
 }
 
