@@ -9,20 +9,14 @@ import { interpolate } from "d3-interpolate";
 import { interval } from "d3-timer";
 import "d3-transition";
 
-import { type LogoSettings } from "./logo";
-import { logoData } from "./logo";
+import { type RenderSettings, type LogoData, dataGen } from "./logo";
 
-export function render(g: any, size: number, settings: LogoSettings) {
+export function render(g: any, size: number, settings: RenderSettings) {
+  const data = dataGen(settings.nRays, settings.computes, settings.weights)(0);
   const {
-    pupil,
-    base,
-    mid,
-    edge,
-    baseCollapse,
-    midCollapse,
-    edgeCollapse,
     nRays,
     rayWidth,
+    pupil,
     backgroundColor,
     baseColor,
     midColor,
@@ -54,23 +48,15 @@ export function render(g: any, size: number, settings: LogoSettings) {
     .innerRadius(d => (d[0] + pupil) * backgroundRadius)
     .outerRadius(d => (d[1] + pupil) * backgroundRadius);
 
-  const redraw = data => {
-    layers.forEach((layer, layer_index) => {
-      const rays = internal
-        .selectAll(`.ray-${layer}`)
-        .data(data[layer_index], d => d.data.i + "-" + layer);
+  layers.forEach((layer, layer_index) => {
+    const rays = internal
+      .selectAll(`.ray-${layer}`)
+      .data(data[layer_index], d => d.data.i + "-" + layer);
 
-      rays
-        .enter()
-        .append("path")
-        .each(function(d) {
-          this._current = d;
-        })
-        .attr("d", arc)
-        .attr("class", d => `ray-${layer}`)
-        .attr("fill", d => color(layer));
-    });
-  };
-
-  let k = 0;
+    rays
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .attr("fill", d => color(layer));
+  });
 }

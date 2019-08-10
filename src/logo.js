@@ -9,16 +9,13 @@ import { interval } from "d3-timer";
 import { sum } from "d3-array";
 import "d3-transition";
 
-export type LogoSettings = {|
-  edgeCollapse: number[],
-  midCollapse: number[],
-  baseCollapse: number[],
+export type Radians = number;
+
+export type RenderSettings = {|
+  +computes: RayCompute[],
+  +weights: RayWeight[],
 
   pupil: number,
-  base: number,
-  mid: number,
-  edge: number,
-
   rayWidth: number,
   nRays: number,
 

@@ -1,15 +1,14 @@
-import { svg } from "./svg";
-import { logo } from "./logo";
+// @flow
 
-const width = 1125;
-const height = 2436;
+import { svg } from "./svg";
+import { render } from "./logoSvg";
+import { defaultSettings } from "./defaultSettings";
+
+const x = 512;
 
 function design(g) {
-  const size = 768;
-  const x = (width - size) / 2;
-  const y = ((height - size) * 2) / 3;
-  g = g.append("g").attr("transform", `translate(${x}, ${y})`);
-  logo(g, size);
+  g = g.append("g").attr("transform", `translate(${x / 2}, ${x / 2})`);
+  render(g, x, defaultSettings());
 }
 
-console.log(svg(design, width, height));
+console.log(svg(design, x, x));

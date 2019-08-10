@@ -2,7 +2,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { canvasRender, defaultCanvasRender } from "./logoCanvas";
+import { canvasRender } from "./logoCanvas";
+import { defaultSettings } from "./defaultSettings";
 import "./style.css";
 import favicon from "./favicon.png";
 
@@ -60,8 +61,8 @@ export class Landing extends React.Component<{}> {
   }
 
   componentDidMount() {
-    const canvas = document.getElementById("logo-canvas");
-    defaultCanvasRender(canvas);
+    const canvas: any = document.getElementById("logo-canvas");
+    canvasRender(canvas, defaultSettings());
   }
 }
 

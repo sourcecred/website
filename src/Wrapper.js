@@ -4,8 +4,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3-selection";
 
-import { type LogoSettings } from "./logo";
-
 export type Props = {|
   generator: (g: any) => void,
   x: number,
