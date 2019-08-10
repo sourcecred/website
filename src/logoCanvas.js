@@ -88,6 +88,14 @@ export function canvasRender(
     ctx.fill();
     ctx.closePath();
 
+    const pupilColor = "#1c2f40";
+    ctx.fillStyle = pupilColor;
+    ctx.strokeStyle = pupilColor;
+    ctx.beginPath();
+    ctx.arc(0, 0, pupil * backgroundRadius, 0, TAU, true);
+    ctx.fill();
+    ctx.closePath();
+
     data.forEach((layer, i) => {
       ctx.strokeStyle = colors[i];
       ctx.fillStyle = colors[i];
@@ -110,14 +118,14 @@ export function canvasRender(
 export function defaultCanvasRender(canvas: HTMLCanvasElement) {
   const renderSettings: RenderSettings = {
     pupil: 0.4,
-    rayWidth: 0.5,
-    nRays: 120,
+    rayWidth: 0.75,
+    nRays: 30,
     backgroundColor: "#20364a",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c"
   };
-  const computes = [spiral(4), spiral(6), spiral(4)];
+  const computes = [spiral(4), spiral(6), spiral(12)];
   return canvasRender(canvas, computes, renderSettings);
 }
 
