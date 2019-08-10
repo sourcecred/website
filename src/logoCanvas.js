@@ -3,7 +3,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { select } from "d3-selection";
-import { arc as d3Arc, stack } from "d3-shape";
+import { arc as d3Arc } from "d3-shape";
 import { scaleOrdinal } from "d3-scale";
 import { interpolate } from "d3-interpolate";
 import { interval } from "d3-timer";
@@ -12,7 +12,12 @@ import "d3-transition";
 export type Radians = number;
 const TAU = 2 * Math.PI;
 
-import { type RayCompute, type LogoData, dataGen } from "./logo";
+import {
+  type RayCompute,
+  type LogoData,
+  dataGen,
+  type RayWeight
+} from "./logo";
 
 export type DataSettings = {|
   +base: RayCompute,
@@ -34,6 +39,7 @@ export type RenderSettings = {|
 export function canvasRender(
   canvas: HTMLCanvasElement,
   computes: RayCompute[],
+  weights: RayWeight[],
   renderSettings: RenderSettings
 ) {
   const {
@@ -71,10 +77,10 @@ export function canvasRender(
   const colors = [baseColor, midColor, edgeColor];
   const rayWidthRadians = (TAU / nRays) * rayWidth;
 
-  const toPix = x => ((x / 3) * (1 - pupil) + pupil) * backgroundRadius;
+  const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
   const arc = d3Arc()
-    .startAngle(d => (d.i / nRays) * TAU)
-    .endAngle(d => (d.i / nRays) * TAU + rayWidthRadians)
+    .startAngle(d => (-d.i / nRays) * TAU)
+    .endAngle(d => (-d.i / nRays) * TAU - rayWidthRadians)
     .innerRadius(d => toPix(d.y0))
     .outerRadius(d => toPix(d.y1))
     .context(ctx);
@@ -88,7 +94,7 @@ export function canvasRender(
     ctx.fill();
     ctx.closePath();
 
-    const pupilColor = "#1c2f40";
+    const pupilColor = "#111c27";
     ctx.fillStyle = pupilColor;
     ctx.strokeStyle = pupilColor;
     ctx.beginPath();
@@ -99,6 +105,7 @@ export function canvasRender(
     data.forEach((layer, i) => {
       ctx.strokeStyle = colors[i];
       ctx.fillStyle = colors[i];
+
       layer.forEach(x => {
         ctx.beginPath();
         arc(x);
@@ -108,25 +115,30 @@ export function canvasRender(
     });
   };
 
-  const gen = dataGen(nRays, computes);
+  const gen = dataGen(nRays, computes, weights);
   const redrawForOffset = o => redraw(gen(o));
   let offset = 0;
   redrawForOffset(offset);
-  interval(() => redrawForOffset((offset += 0.005)), 16);
+  interval(() => redrawForOffset((offset += 0.002)), 16);
 }
 
 export function defaultCanvasRender(canvas: HTMLCanvasElement) {
   const renderSettings: RenderSettings = {
     pupil: 0.4,
     rayWidth: 0.75,
-    nRays: 30,
+    nRays: 40,
     backgroundColor: "#20364a",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c"
   };
-  const computes = [spiral(4), spiral(6), spiral(12)];
-  return canvasRender(canvas, computes, renderSettings);
+  const computes = [spiral(14), spiral(6), spiral(20)];
+  const weights = [
+    { fixed: 2, variable: 0 },
+    { fixed: 2, variable: 2 },
+    { fixed: 2, variable: 1 }
+  ];
+  return canvasRender(canvas, computes, weights, renderSettings);
 }
 
 function spiral(periods: number, offset: ?Radians): RayCompute {

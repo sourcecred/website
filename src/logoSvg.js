@@ -55,30 +55,10 @@ export function render(g: any, size: number, settings: LogoSettings) {
     .outerRadius(d => (d[1] + pupil) * backgroundRadius);
 
   const redraw = data => {
-    function arcTween(data, layer) {
-      return function(d) {
-        const [bot0, top0] = this._current;
-        const [bot1, top1] = d;
-        this._current = d;
-        const botI = interpolate(bot0, bot1);
-        const topI = interpolate(top0, top1);
-        return function(t) {
-          d[0] = botI(t);
-          d[1] = topI(t);
-          return arc(d);
-        };
-      };
-    }
-
     layers.forEach((layer, layer_index) => {
       const rays = internal
         .selectAll(`.ray-${layer}`)
         .data(data[layer_index], d => d.data.i + "-" + layer);
-
-      rays
-        .transition()
-        .duration(1000)
-        .attrTween("d", arcTween(data[layer_index]));
 
       rays
         .enter()
@@ -93,8 +73,4 @@ export function render(g: any, size: number, settings: LogoSettings) {
   };
 
   let k = 0;
-  interval(() => {
-    const data = logoData((k += 1), settings);
-    redraw(data);
-  }, 1000);
 }
