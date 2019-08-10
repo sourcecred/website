@@ -2,8 +2,9 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { logo, type LogoSettings } from "./logo";
+import { type LogoSettings } from "./logo";
 import { Wrapper } from "./wrapper";
+import { render } from "./logoSvg";
 
 const canonicalLogo: LogoSettings = {
   baseCollapse: [1],
@@ -22,14 +23,14 @@ const canonicalLogo: LogoSettings = {
 };
 
 const otherCoolLogo: LogoSettings = {
-  pupil: 0.4,
-  base: 0.5,
-  mid: 0.8,
-  edge: 0.97,
+  pupil: 0.39,
+  base: 0.1,
+  mid: 0.2,
+  edge: 0.28,
 
-  baseCollapse: spiralLength(36),
-  midCollapse: spiralLength(18),
-  edgeCollapse: spiralLength(9),
+  baseCollapse: [1],
+  midCollapse: spiralLength(9).reverse(),
+  edgeCollapse: spiralLength(9).reverse(),
   rayWidth: 0.75,
   nRays: 72,
   backgroundColor: "#20364a",
@@ -42,7 +43,7 @@ export class Main extends React.Component<{}> {
   render() {
     return (
       <svg width="600" height="600">
-        <Wrapper x={50} y={50} generator={g => logo(g, 512)} />
+        <Wrapper x={50} y={50} generator={g => render(g, 512, otherCoolLogo)} />
       </svg>
     );
   }
