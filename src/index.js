@@ -3,9 +3,52 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { canvasRender } from "./logoCanvas";
+import { render as svgRender } from "./logoSvg";
 import { defaultSettings } from "./defaultSettings";
 import "./style.css";
 import favicon from "./favicon.png";
+import { Wrapper } from "./wrapper";
+import { type RenderSettings } from "./logo";
+import { spiral } from "./rays";
+
+class MiniLogo extends React.Component<{|
+  size: number,
+  settings?: RenderSettings
+|}> {
+  render() {
+    const size = this.props.size;
+    const settings = this.props.settings || defaultSettings();
+    function svgGen(g) {
+      //g = g.append("g").attr("transform", `translate(${x / 2}, ${x / 2})`);
+      svgRender(g, size, settings);
+    }
+    return (
+      <svg width={size} height={size}>
+        <Wrapper generator={svgGen} x={0} y={0} />
+      </svg>
+    );
+  }
+}
+
+export function miniSettings(): RenderSettings {
+  const computes = [spiral(4), spiral(4), spiral(4)];
+  const weights = [
+    { fixed: 2, variable: 0 },
+    { fixed: 2, variable: 2 },
+    { fixed: 2, variable: 1 }
+  ];
+  return {
+    pupil: 0.35,
+    rayWidth: 0.5,
+    nRays: 12,
+    backgroundColor: "#20364a",
+    baseColor: "#ffbc95",
+    midColor: "#e7a59a",
+    edgeColor: "#87738c",
+    computes,
+    weights
+  };
+}
 
 export class Landing extends React.Component<{}> {
   render() {
@@ -15,13 +58,17 @@ export class Landing extends React.Component<{}> {
         <h1>SourceCred</h1>
         <h2 className="no-bottom-margin">a reputation protocol</h2>
         <h2 className="no-top-margin">for open collaboration</h2>
+
         <p>
           SourceCred creates <em>cred</em>, a project-specific reputation
           metric.
         </p>
         <p>Everyone who participates in the project earns cred.</p>
 
-        <h3>Data Driven</h3>
+        <h3>
+          <MiniLogo size={32} settings={miniSettings()} />
+          Data Driven
+        </h3>
         <p>
           Every contribution is counted, from the biggest redesign to the
           smallest typo fix. First-pass scores are calculated using the

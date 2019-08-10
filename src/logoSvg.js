@@ -11,6 +11,8 @@ import "d3-transition";
 
 import { type RenderSettings, type LogoData, dataGen } from "./logo";
 
+const TAU = 2 * Math.PI;
+
 export function render(g: any, size: number, settings: RenderSettings) {
   const data = dataGen(settings.nRays, settings.computes, settings.weights)(0);
   const {
@@ -32,26 +34,25 @@ export function render(g: any, size: number, settings: RenderSettings) {
   internal
     .append("circle")
     .attr("fill", backgroundColor)
-    .attr("stroke", "#3f6385")
-    .attr("stroke-width", 2)
     .attr("r", backgroundRadius);
 
   const layers = ["base", "mid", "edge"];
   const color = scaleOrdinal()
     .domain(layers)
     .range([baseColor, midColor, edgeColor]);
-  const width = ((2 * Math.PI) / nRays) * rayWidth;
+  const width = (TAU / nRays) * rayWidth;
 
+  const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
   const arc = d3Arc()
-    .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
-    .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
-    .innerRadius(d => (d[0] + pupil) * backgroundRadius)
-    .outerRadius(d => (d[1] + pupil) * backgroundRadius);
+    .startAngle(d => (-d.i / nRays) * TAU)
+    .endAngle(d => (-d.i / nRays) * TAU - width)
+    .innerRadius(d => toPix(d.y0))
+    .outerRadius(d => toPix(d.y1));
 
   layers.forEach((layer, layer_index) => {
     const rays = internal
       .selectAll(`.ray-${layer}`)
-      .data(data[layer_index], d => d.data.i + "-" + layer);
+      .data(data[layer_index], d => d.i + "-" + layer);
 
     rays
       .enter()
