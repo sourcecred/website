@@ -92,16 +92,19 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
     .innerRadius(d => (d[0] + pupil) * backgroundRadius)
     .outerRadius(d => (d[1] + pupil) * backgroundRadius);
-  internal
-    .append("g")
-    .selectAll("g")
-    .data(stacked)
-    .join("g")
-    .attr("fill", d => color(d.key))
-    .selectAll("rect")
-    .data(d => d)
-    .join("path")
-    .attr("d", arc);
+
+  layers.forEach((layer, layer_index) => {
+    const rays = internal
+      .selectAll(`.ray-${layer}`)
+      .data(stacked[layer_index], d => d.data.i + "-" + layer);
+
+    rays
+      .enter()
+      .append("path")
+      .attr("class", d => `ray-${layer}`)
+      .attr("d", arc)
+      .attr("fill", d => color(layer));
+  });
 }
 
 function range(n) {
