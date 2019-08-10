@@ -29,10 +29,10 @@ export type LogoSettings = {|
 |};
 
 const defaultSettings: LogoSettings = {
-  pupil: 0.4,
+  pupil: 0.39,
   base: 0.1,
   mid: 0.2,
-  edge: 0.3,
+  edge: 0.28,
 
   baseCollapse: spiralLength(36).reverse(),
   midCollapse: spiralLength(18).reverse(),
