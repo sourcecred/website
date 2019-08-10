@@ -5,6 +5,9 @@ import ReactDOM from "react-dom";
 import { select } from "d3-selection";
 import { arc as d3Arc, stack } from "d3-shape";
 import { scaleOrdinal } from "d3-scale";
+import { interpolate } from "d3-interpolate";
+import { interval } from "d3-timer";
+import "d3-transition";
 
 export type LogoSettings = {|
   edgeCollapse: number[],
@@ -73,38 +76,70 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     .attr("stroke-width", 2)
     .attr("r", backgroundRadius);
 
-  const data = range(nRays).map(i => ({
-    i,
-    base: base * baseCollapse[i % baseCollapse.length],
-    mid: mid * midCollapse[i % midCollapse.length],
-    edge: edge * edgeCollapse[i % edgeCollapse.length]
-  }));
+  const redraw = offset => {
+    const data = range(nRays).map(i => {
+      const j = i + (72 - (offset % 72));
+      return {
+        i,
+        base: base * baseCollapse[j % baseCollapse.length],
+        mid: mid * midCollapse[j % midCollapse.length],
+        edge: edge * edgeCollapse[j % edgeCollapse.length]
+      };
+    });
+    console.log(`offset: ${offset}, base: ${data[0].base}`);
 
-  const layers = ["base", "mid", "edge"];
-  const stacked = stack().keys(layers)(data);
-  const color = scaleOrdinal()
-    .domain(layers)
-    .range([baseColor, midColor, edgeColor]);
+    const layers = ["base", "mid", "edge"];
+    const stacked = stack().keys(layers)(data);
+    const color = scaleOrdinal()
+      .domain(layers)
+      .range([baseColor, midColor, edgeColor]);
 
-  const width = ((2 * Math.PI) / nRays) * rayWidth;
-  const arc = d3Arc()
-    .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
-    .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
-    .innerRadius(d => (d[0] + pupil) * backgroundRadius)
-    .outerRadius(d => (d[1] + pupil) * backgroundRadius);
+    const width = ((2 * Math.PI) / nRays) * rayWidth;
+    const arc = d3Arc()
+      .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
+      .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
+      .innerRadius(d => (d[0] + pupil) * backgroundRadius)
+      .outerRadius(d => (d[1] + pupil) * backgroundRadius);
 
-  layers.forEach((layer, layer_index) => {
-    const rays = internal
-      .selectAll(`.ray-${layer}`)
-      .data(stacked[layer_index], d => d.data.i + "-" + layer);
+    function arcTween(data, layer) {
+      return function(d) {
+        const [bot0, top0] = this._current;
+        const [bot1, top1] = d;
+        this._current = d;
+        const botI = interpolate(bot0, bot1);
+        const topI = interpolate(top0, top1);
+        return function(t) {
+          d[0] = botI(t);
+          d[1] = topI(t);
+          return arc(d);
+        };
+      };
+    }
 
-    rays
-      .enter()
-      .append("path")
-      .attr("class", d => `ray-${layer}`)
-      .attr("d", arc)
-      .attr("fill", d => color(layer));
-  });
+    layers.forEach((layer, layer_index) => {
+      const rays = internal
+        .selectAll(`.ray-${layer}`)
+        .data(stacked[layer_index], d => d.data.i + "-" + layer);
+
+      rays
+        .transition()
+        .duration(1000)
+        .attrTween("d", arcTween(stacked[layer_index]));
+
+      rays
+        .enter()
+        .append("path")
+        .each(function(d) {
+          this._current = d;
+        })
+        //      .attr("d", arc)
+        .attr("class", d => `ray-${layer}`)
+        .attr("fill", d => color(layer));
+    });
+  };
+  let k = 0;
+  interval(() => redraw((k += 1)), 1000);
+  redraw(0);
 }
 
 function range(n) {
