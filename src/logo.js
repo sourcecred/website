@@ -34,11 +34,11 @@ const defaultSettings: LogoSettings = {
   mid: 0.2,
   edge: 0.28,
 
-  baseCollapse: spiralLength(36).reverse(),
-  midCollapse: spiralLength(18).reverse(),
+  baseCollapse: [1],
+  midCollapse: spiralLength(9).reverse(),
   edgeCollapse: spiralLength(9).reverse(),
   rayWidth: 0.75,
-  nRays: 72,
+  nRays: 18,
   backgroundColor: "#20364a",
   baseColor: "#ffbc95",
   midColor: "#e7a59a",
@@ -76,40 +76,19 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     .attr("stroke-width", 2)
     .attr("r", backgroundRadius);
 
-  const redraw = offset => {
-    const steps = Math.floor(offset);
-    const remainder = offset - steps;
+  const layers = ["base", "mid", "edge"];
+  const color = scaleOrdinal()
+    .domain(layers)
+    .range([baseColor, midColor, edgeColor]);
+  const width = ((2 * Math.PI) / nRays) * rayWidth;
 
-    const data = range(nRays).map(i => {
-      const j = steps + i;
-      const base0 = baseCollapse[j % baseCollapse.length];
-      const base1 = baseCollapse[(j + 1) % baseCollapse.length];
-      const mid0 = midCollapse[j % midCollapse.length];
-      const mid1 = midCollapse[(j + 1) % midCollapse.length];
-      const edge0 = edgeCollapse[j % edgeCollapse.length];
-      const edge1 = edgeCollapse[(j + 1) % edgeCollapse.length];
-      return {
-        i,
-        base: base * interpolate(base0, base1)(remainder),
-        mid: mid * interpolate(mid0, mid1)(remainder),
-        edge: edge * interpolate(edge0, edge1)(remainder)
-      };
-    });
-    console.log(`offset: ${offset}, base: ${data[0].base}`);
+  const arc = d3Arc()
+    .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
+    .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
+    .innerRadius(d => (d[0] + pupil) * backgroundRadius)
+    .outerRadius(d => (d[1] + pupil) * backgroundRadius);
 
-    const layers = ["base", "mid", "edge"];
-    const stacked = stack().keys(layers)(data);
-    const color = scaleOrdinal()
-      .domain(layers)
-      .range([baseColor, midColor, edgeColor]);
-
-    const width = ((2 * Math.PI) / nRays) * rayWidth;
-    const arc = d3Arc()
-      .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
-      .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + width)
-      .innerRadius(d => (d[0] + pupil) * backgroundRadius)
-      .outerRadius(d => (d[1] + pupil) * backgroundRadius);
-
+  const redraw = data => {
     function arcTween(data, layer) {
       return function(d) {
         const [bot0, top0] = this._current;
@@ -128,14 +107,12 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
     layers.forEach((layer, layer_index) => {
       const rays = internal
         .selectAll(`.ray-${layer}`)
-        .data(stacked[layer_index], d => d.data.i + "-" + layer);
+        .data(data[layer_index], d => d.data.i + "-" + layer);
 
-      rays.attr("d", arc);
-      /*
+      rays
         .transition()
         .duration(1000)
-        .attrTween("d", arcTween(stacked[layer_index]));
-        */
+        .attrTween("d", arcTween(data[layer_index]));
 
       rays
         .enter()
@@ -148,9 +125,50 @@ export function logo(g: any, size: number, settings: ?LogoSettings) {
         .attr("fill", d => color(layer));
     });
   };
+
   let k = 0;
-  interval(() => redraw((k += 0.002)), 16);
-  redraw(0);
+  interval(() => {
+    const data = logoData((k += 1), settings || defaultSettings);
+    redraw(data);
+  }, 1000);
+}
+
+function logoData(offset: number, settings: LogoSettings) {
+  const {
+    pupil,
+    base,
+    mid,
+    edge,
+    baseCollapse,
+    midCollapse,
+    edgeCollapse,
+    nRays,
+    rayWidth,
+    backgroundColor,
+    baseColor,
+    midColor,
+    edgeColor
+  } = settings;
+  const steps = Math.floor(offset);
+  const remainder = offset - steps;
+  const data = range(nRays).map(i => {
+    const j = steps + i;
+    const base0 = baseCollapse[j % baseCollapse.length];
+    const base1 = baseCollapse[(j + 1) % baseCollapse.length];
+    const mid0 = midCollapse[j % midCollapse.length];
+    const mid1 = midCollapse[(j + 1) % midCollapse.length];
+    const edge0 = edgeCollapse[j % edgeCollapse.length];
+    const edge1 = edgeCollapse[(j + 1) % edgeCollapse.length];
+    return {
+      i,
+      base: base * interpolate(base0, base1)(remainder),
+      mid: mid * interpolate(mid0, mid1)(remainder),
+      edge: edge * interpolate(edge0, edge1)(remainder)
+    };
+  });
+  const layers = ["base", "mid", "edge"];
+  const stacked = stack().keys(layers)(data);
+  return stacked;
 }
 
 function range(n) {
