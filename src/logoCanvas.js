@@ -65,7 +65,6 @@ export function canvasRender(
     // Scale all drawing operations by the dpr, so you
     // don't have to worry about the difference.
     ctx.scale(dpr, dpr);
-    console.log(rect, dpr, canvas);
     const size = Math.min(rect.height, rect.width);
     ctx.translate(size / 2, size / 2);
     return { ctx, size };
