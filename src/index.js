@@ -5,6 +5,8 @@ import ReactDOM from "react-dom";
 import { type LogoSettings } from "./logo";
 import { Wrapper } from "./wrapper";
 import { render } from "./logoSvg";
+import { canvasRender } from "./logoCanvas";
+import { select } from "d3-selection";
 
 const canonicalLogo: LogoSettings = {
   baseCollapse: [1],
@@ -29,9 +31,9 @@ const otherCoolLogo: LogoSettings = {
   edge: 0.28,
 
   baseCollapse: [1],
-  midCollapse: spiralLength(9).reverse(),
-  edgeCollapse: spiralLength(9).reverse(),
-  rayWidth: 0.75,
+  midCollapse: spiralLength(12).reverse(),
+  edgeCollapse: spiralLength(36).reverse(),
+  rayWidth: 0.7,
   nRays: 72,
   backgroundColor: "#20364a",
   baseColor: "#ffbc95",
@@ -39,18 +41,9 @@ const otherCoolLogo: LogoSettings = {
   edgeColor: "#87738c"
 };
 const logos = [canonicalLogo, otherCoolLogo];
-export class Main extends React.Component<{}> {
-  render() {
-    return (
-      <svg width="600" height="600">
-        <Wrapper x={50} y={50} generator={g => render(g, 512, otherCoolLogo)} />
-      </svg>
-    );
-  }
-}
 
-const wrapper = document.getElementById("target");
-wrapper ? ReactDOM.render(<Main />, wrapper) : false;
+const wrapper: any = document.getElementById("target");
+wrapper ? canvasRender(wrapper, otherCoolLogo) : false;
 
 function range(n) {
   const ret = [];
