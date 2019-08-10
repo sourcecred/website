@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import { type LogoSettings } from "./logo";
 import { Wrapper } from "./wrapper";
 import { render } from "./logoSvg";
-import { canvasRender } from "./logoCanvas";
+import { canvasRender, defaultCanvasRender } from "./logoCanvas";
 import { select } from "d3-selection";
 
 const canonicalLogo: LogoSettings = {
@@ -43,7 +43,7 @@ const otherCoolLogo: LogoSettings = {
 const logos = [canonicalLogo, otherCoolLogo];
 
 const wrapper: any = document.getElementById("target");
-wrapper ? canvasRender(wrapper, otherCoolLogo) : false;
+wrapper ? defaultCanvasRender(wrapper) : false;
 
 function range(n) {
   const ret = [];

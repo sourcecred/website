@@ -28,42 +28,38 @@ export type LogoSettings = {|
   edgeColor: string
 |};
 
-export function logoData(offset: number, settings: LogoSettings) {
-  const {
-    pupil,
-    base,
-    mid,
-    edge,
-    baseCollapse,
-    midCollapse,
-    edgeCollapse,
-    nRays,
-    rayWidth,
-    backgroundColor,
-    baseColor,
-    midColor,
-    edgeColor
-  } = settings;
-  const steps = Math.floor(offset);
-  const remainder = offset - steps;
-  const data = range(nRays).map(i => {
-    const j = steps + i;
-    const base0 = baseCollapse[j % baseCollapse.length];
-    const base1 = baseCollapse[(j + 1) % baseCollapse.length];
-    const mid0 = midCollapse[j % midCollapse.length];
-    const mid1 = midCollapse[(j + 1) % midCollapse.length];
-    const edge0 = edgeCollapse[j % edgeCollapse.length];
-    const edge1 = edgeCollapse[(j + 1) % edgeCollapse.length];
-    return {
-      i,
-      base: base * interpolate(base0, base1)(remainder),
-      mid: mid * interpolate(mid0, mid1)(remainder),
-      edge: edge * interpolate(edge0, edge1)(remainder)
-    };
-  });
-  const layers = ["base", "mid", "edge"];
-  const stacked = stack().keys(layers)(data);
-  return stacked;
+export type Datum = {|
+  +i: number,
+  +y0: number,
+  +y1: number
+|};
+export type LogoData = Datum[][];
+// Compute the height of a ray given the index, and the number of rays
+// the number of rays is so it can get the right harmonics
+// the index is a floating point number between 0 and nRays.
+// it's not guaranteed to be integer because we want to interpolate partial steps.
+export type RayCompute = (i: number, nRays: number) => number;
+
+export function dataGen(
+  nRays: number,
+  computes: RayCompute[]
+): number => LogoData {
+  if (computes.length !== 3) {
+    throw new Error("wrong number of computes");
+  }
+  return function(offset: number): LogoData {
+    const lastHeight = new Array(nRays).fill(0);
+    return computes.map(c => {
+      return range(nRays).map(i => {
+        const j = (i + offset) % nRays;
+        const raySize = c(j, nRays);
+        const y0 = lastHeight[i];
+        const y1 = y0 + raySize;
+        lastHeight[i] = y1;
+        return { y0, y1, i };
+      });
+    });
+  };
 }
 
 function range(n) {

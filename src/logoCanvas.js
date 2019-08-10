@@ -9,16 +9,16 @@ import { interpolate } from "d3-interpolate";
 import { interval } from "d3-timer";
 import "d3-transition";
 
-export type LogoSettings = {|
-  edgeCollapse: number[],
-  midCollapse: number[],
-  baseCollapse: number[],
+import { type RayCompute, type LogoData, dataGen } from "./logo";
 
+export type DataSettings = {|
+  +base: RayCompute,
+  +mid: RayCompute,
+  +edge: RayCompute
+|};
+
+export type RenderSettings = {|
   pupil: number,
-  base: number,
-  mid: number,
-  edge: number,
-
   rayWidth: number,
   nRays: number,
 
@@ -30,23 +30,18 @@ export type LogoSettings = {|
 
 export function canvasRender(
   canvas: HTMLCanvasElement,
-  settings: LogoSettings
+  computes: RayCompute[],
+  renderSettings: RenderSettings
 ) {
   const {
     pupil,
-    base,
-    mid,
-    edge,
-    baseCollapse,
-    midCollapse,
-    edgeCollapse,
-    nRays,
     rayWidth,
     backgroundColor,
     baseColor,
     midColor,
-    edgeColor
-  } = settings;
+    edgeColor,
+    nRays
+  } = renderSettings;
 
   function setupCanvas(canvas: HTMLCanvasElement) {
     // Get the device pixel ratio, falling back to 1.
@@ -62,122 +57,98 @@ export function canvasRender(
     // don't have to worry about the difference.
     ctx.scale(dpr, dpr);
     console.log(rect, dpr, canvas);
-    return { ctx, width: rect.width, height: rect.height };
+    const size = Math.min(rect.height, rect.width);
+    ctx.translate(size / 2, size / 2);
+    return { ctx, size };
   }
 
-  const { ctx, height, width } = setupCanvas(canvas);
-  console.log(ctx, canvas);
-  const size = Math.min(height, width);
+  const { ctx, size } = setupCanvas(canvas);
   const backgroundRadius = (size / Math.sqrt(2)) * 0.7;
 
-  const layers = ["base", "mid", "edge"];
-  const color = scaleOrdinal()
-    .domain(layers)
-    .range([baseColor, midColor, edgeColor]);
+  const colors = [baseColor, midColor, edgeColor];
   const rayWidthRadians = ((2 * Math.PI) / nRays) * rayWidth;
 
+  const toPix = x => ((x / 3) * (1 - pupil) + pupil) * backgroundRadius;
   const arc = d3Arc()
-    .startAngle(d => (d.data.i / nRays) * 2 * Math.PI)
-    .endAngle(d => (d.data.i / nRays) * 2 * Math.PI + rayWidthRadians)
-    .innerRadius(d => (d[0] + pupil) * backgroundRadius)
-    .outerRadius(d => (d[1] + pupil) * backgroundRadius)
+    .startAngle(d => (d.i / nRays) * 2 * Math.PI)
+    .endAngle(d => (d.i / nRays) * 2 * Math.PI + rayWidthRadians)
+    .innerRadius(d => toPix(d.y0))
+    .outerRadius(d => toPix(d.y1))
     .context(ctx);
 
-  ctx.translate(size / 2, size / 2);
   const redraw = data => {
-    console.log("redraw");
     // Add background circle
-    /*
     ctx.fillStyle = backgroundColor;
     ctx.strokeStyle = "#3f6385";
     ctx.beginPath();
-    ctx.arc(size / 2, size / 2, backgroundRadius, 0, 2 * Math.PI, true);
-    ctx.fill();
-    ctx.closePath();
-    */
-    ctx.fillStyle = backgroundColor;
-    ctx.strokeStyle = "#3f6385";
-    ctx.beginPath();
-    d3Arc()
-      .startAngle(0)
-      .endAngle(2 * Math.PI)
-      .innerRadius(0)
-      .outerRadius(backgroundRadius)
-      .context(ctx)();
+    ctx.arc(0, 0, backgroundRadius, 0, 2 * Math.PI, true);
     ctx.fill();
     ctx.closePath();
 
-    data.reverse().forEach(layer => {
-      const f = color(layer.key);
-      ctx.strokeStyle = f;
-      ctx.fillStyle = f;
-      layer.forEach(d => {
+    data.forEach((layer, i) => {
+      ctx.strokeStyle = colors[i];
+      ctx.fillStyle = colors[i];
+      layer.forEach(x => {
         ctx.beginPath();
-        arc(d);
+        arc(x);
         ctx.fill();
         ctx.closePath();
       });
     });
   };
 
-  const redrawForOffset = o => {
-    const data = logoData(offset, settings);
-    redraw(data);
-  };
+  const gen = dataGen(nRays, computes);
+  const redrawForOffset = o => redraw(gen(o));
   let offset = 0;
   redrawForOffset(offset);
-  interval(() => redrawForOffset((offset += 0.03)), 16);
+  interval(() => redrawForOffset((offset += 0.05)), 16);
 }
 
-function logoData(offset: number, settings: LogoSettings) {
-  const {
-    pupil,
-    base,
-    mid,
-    edge,
-    baseCollapse,
-    midCollapse,
-    edgeCollapse,
-    nRays,
-    rayWidth,
-    backgroundColor,
-    baseColor,
-    midColor,
-    edgeColor
-  } = settings;
-  const steps = Math.floor(offset);
-  const remainder = offset - steps;
-  const data = range(nRays).map(i => {
-    const j = steps + i;
-    const base0 = baseCollapse[j % baseCollapse.length];
-    const base1 = baseCollapse[(j + 1) % baseCollapse.length];
-    const mid0 = midCollapse[j % midCollapse.length];
-    const mid1 = midCollapse[(j + 1) % midCollapse.length];
-    const edge0 = edgeCollapse[j % edgeCollapse.length];
-    const edge1 = edgeCollapse[(j + 1) % edgeCollapse.length];
-    return {
-      i,
-      base: base * interpolate(base0, base1)(remainder),
-      mid: mid * interpolate(mid0, mid1)(remainder),
-      edge: edge * interpolate(edge0, edge1)(remainder)
-    };
-  });
-  const layers = ["base", "mid", "edge"];
-  const stacked = stack().keys(layers)(data);
-  return stacked;
+export function defaultCanvasRender(canvas: HTMLCanvasElement) {
+  const renderSettings: RenderSettings = {
+    pupil: 0.4,
+    rayWidth: 0.5,
+    nRays: 120,
+    backgroundColor: "#20364a",
+    baseColor: "#ffbc95",
+    midColor: "#e7a59a",
+    edgeColor: "#87738c"
+  };
+  const computes = [sinCompute(4, Math.PI), sinCompute(6), spiralCompute(2)];
+  return canvasRender(canvas, computes, renderSettings);
 }
 
-function range(n) {
-  const ret = [];
-  for (let i = 0; i < n; i++) {
-    ret.push(i);
-  }
-  return ret;
-}
-function spiralLength(n) {
-  return range(n).map(x => x / (n - 1));
+function spiralCompute(periods: number): RayCompute {
+  return function(i, nRays) {
+    const i0 = Math.floor(i);
+    const i1 = i0 + 1;
+    const id = i - i0;
+    const periodLength = Math.floor(nRays / periods);
+    const f = x => 1 - (x % periodLength) / periodLength;
+    const y0 = f(i0);
+    const y1 = f(i1);
+    return y0 * (1 - id) + y1 * id;
+  };
 }
 
-function spiralLengthNever0(n) {
-  return range(n).map(x => (x + 1) / n);
+function constantCompute(k: number): RayCompute {
+  return function(i, nRays) {
+    return k;
+  };
+}
+function sinCompute(periods: number, offset: ?number): RayCompute {
+  offset = offset || 0;
+  return function(i, nRays) {
+    const periodLength = Math.floor(nRays / periods);
+    const x = (i / periodLength) * Math.PI * 2 + offset;
+    return Math.sin(x) / 2 + 0.5;
+  };
+}
+function cosCompute(periods: number, offset: ?number): RayCompute {
+  offset = offset || 0;
+  return function(i, nRays) {
+    const periodLength = Math.floor(nRays / periods);
+    const x = ((i % periodLength) / periodLength) * Math.PI * 2 + offset;
+    return Math.cos(x) / 2 + 0.5;
+  };
 }
