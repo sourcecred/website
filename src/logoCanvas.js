@@ -9,6 +9,9 @@ import { interpolate } from "d3-interpolate";
 import { interval } from "d3-timer";
 import "d3-transition";
 
+export type Radians = number;
+const TAU = 2 * Math.PI;
+
 import { type RayCompute, type LogoData, dataGen } from "./logo";
 
 export type DataSettings = {|
@@ -66,12 +69,12 @@ export function canvasRender(
   const backgroundRadius = (size / Math.sqrt(2)) * 0.7;
 
   const colors = [baseColor, midColor, edgeColor];
-  const rayWidthRadians = ((2 * Math.PI) / nRays) * rayWidth;
+  const rayWidthRadians = (TAU / nRays) * rayWidth;
 
   const toPix = x => ((x / 3) * (1 - pupil) + pupil) * backgroundRadius;
   const arc = d3Arc()
-    .startAngle(d => (d.i / nRays) * 2 * Math.PI)
-    .endAngle(d => (d.i / nRays) * 2 * Math.PI + rayWidthRadians)
+    .startAngle(d => (d.i / nRays) * TAU)
+    .endAngle(d => (d.i / nRays) * TAU + rayWidthRadians)
     .innerRadius(d => toPix(d.y0))
     .outerRadius(d => toPix(d.y1))
     .context(ctx);
@@ -81,7 +84,7 @@ export function canvasRender(
     ctx.fillStyle = backgroundColor;
     ctx.strokeStyle = "#3f6385";
     ctx.beginPath();
-    ctx.arc(0, 0, backgroundRadius, 0, 2 * Math.PI, true);
+    ctx.arc(0, 0, backgroundRadius, 0, TAU, true);
     ctx.fill();
     ctx.closePath();
 
@@ -101,7 +104,7 @@ export function canvasRender(
   const redrawForOffset = o => redraw(gen(o));
   let offset = 0;
   redrawForOffset(offset);
-  interval(() => redrawForOffset((offset += 0.05)), 16);
+  interval(() => redrawForOffset((offset += 0.005)), 16);
 }
 
 export function defaultCanvasRender(canvas: HTMLCanvasElement) {
@@ -114,41 +117,51 @@ export function defaultCanvasRender(canvas: HTMLCanvasElement) {
     midColor: "#e7a59a",
     edgeColor: "#87738c"
   };
-  const computes = [sinCompute(4, Math.PI), sinCompute(6), spiralCompute(2)];
+  const computes = [spiral(4), spiral(6), spiral(4)];
   return canvasRender(canvas, computes, renderSettings);
 }
 
-function spiralCompute(periods: number): RayCompute {
-  return function(i, nRays) {
-    const i0 = Math.floor(i);
-    const i1 = i0 + 1;
-    const id = i - i0;
-    const periodLength = Math.floor(nRays / periods);
-    const f = x => 1 - (x % periodLength) / periodLength;
-    const y0 = f(i0);
-    const y1 = f(i1);
-    return y0 * (1 - id) + y1 * id;
+function spiral(periods: number, offset: ?Radians): RayCompute {
+  offset = offset || 0;
+  return function(i, rot, nRays) {
+    const periodLength = nRays / periods;
+    const rotIndex = ((offset + rot) / TAU) * nRays;
+    const r0 = Math.floor(rotIndex) + i;
+    const r1 = Math.ceil(rotIndex) + i;
+    const f = x => (periodLength - (x % periodLength)) / periodLength;
+    const rem = rotIndex - Math.floor(rotIndex);
+    return f(r0) * (1 - rem) + f(r1) * rem;
   };
 }
 
-function constantCompute(k: number): RayCompute {
-  return function(i, nRays) {
+function spiralReverse(periods: number, offset: ?Radians): RayCompute {
+  const s = spiral(periods, offset);
+  return (i, rot, nRays) => s(nRays - i, rot, nRays);
+}
+
+function constant(k: number): RayCompute {
+  return function() {
     return k;
   };
 }
-function sinCompute(periods: number, offset: ?number): RayCompute {
+function sin(periods: number, offset: ?Radians): RayCompute {
   offset = offset || 0;
-  return function(i, nRays) {
+  return function(i, rot, nRays) {
     const periodLength = Math.floor(nRays / periods);
-    const x = (i / periodLength) * Math.PI * 2 + offset;
-    return Math.sin(x) / 2 + 0.5;
+    const x = (i / periodLength) * TAU;
+    return Math.sin(x + rot) / 2 + 0.5;
   };
 }
-function cosCompute(periods: number, offset: ?number): RayCompute {
+function cos(periods: number, offset: ?Radians): RayCompute {
   offset = offset || 0;
-  return function(i, nRays) {
+  return function(i, rot, nRays) {
     const periodLength = Math.floor(nRays / periods);
-    const x = ((i % periodLength) / periodLength) * Math.PI * 2 + offset;
-    return Math.cos(x) / 2 + 0.5;
+    const x = ((i % periodLength) / periodLength) * TAU + offset;
+    return Math.cos(x + rot) / 2 + 0.5;
+  };
+}
+function breathe(periodLength: Radians): RayCompute {
+  return function(i, rot, nRays) {
+    return Math.sin(rot / periodLength) / 2 + 0.5;
   };
 }

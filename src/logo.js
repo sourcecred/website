@@ -36,9 +36,10 @@ export type Datum = {|
 export type LogoData = Datum[][];
 // Compute the height of a ray given the index, and the number of rays
 // the number of rays is so it can get the right harmonics
-// the index is a floating point number between 0 and nRays.
-// it's not guaranteed to be integer because we want to interpolate partial steps.
-export type RayCompute = (i: number, nRays: number) => number;
+// the index is an integer in [0, nRays)
+// t is a "time parameter" in radians, between 0 and 2 * Math.PI
+// the time parameter is used to make rotating / updating logos
+export type RayCompute = (i: number, t: number, nRays: number) => number;
 
 export function dataGen(
   nRays: number,
@@ -47,12 +48,12 @@ export function dataGen(
   if (computes.length !== 3) {
     throw new Error("wrong number of computes");
   }
-  return function(offset: number): LogoData {
+  return function(rot: number): LogoData {
+    rot = rot % (Math.PI * 2);
     const lastHeight = new Array(nRays).fill(0);
     return computes.map(c => {
       return range(nRays).map(i => {
-        const j = (i + offset) % nRays;
-        const raySize = c(j, nRays);
+        const raySize = c(i, rot, nRays);
         const y0 = lastHeight[i];
         const y1 = y0 + raySize;
         lastHeight[i] = y1;
