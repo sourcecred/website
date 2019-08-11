@@ -120,7 +120,7 @@ function Section(props: {| +settings: RenderSettings, +children: any |}) {
   return (
     <h3>
       <MiniLogo size={48} settings={settings} />
-      {props.children}
+      <span className="sectionText">{props.children}</span>
       <MiniLogo size={48} settings={settingsReverse} />
     </h3>
   );
@@ -144,8 +144,8 @@ export class Landing extends React.Component<{}> {
         <Section settings={settings.sectionDataDriven}>Data Driven</Section>
         <p>
           Every contribution is counted, from the biggest redesign to the
-          smallest typo fix. First-pass scores are calculated using the
-          [PageRank algorithm].
+          smallest typo fix. Scores are calculated using the [PageRank
+          algorithm].
         </p>
 
         <Section settings={settings.sectionIntersubjective}>

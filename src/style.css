@@ -1,6 +1,7 @@
   canvas {
     height: 256px;
     width: 256px;
+    margin: 0px auto;
   }
   body {
     background-color: #0b1219;
@@ -21,14 +22,20 @@
     font-size: 40px;
   }
   h3 {
-    font-size: 30px;
+    font-size: 36px;
   }
   p {
-    font-size: 18px;
+    font-size: 14px;
+    text-align: left;
   }
   .container {
     max-width: 720px;
     margin: 20px auto;
+    text-align: center;
+  }
+  .sectionText {
+    margin-left: 20px;
+    margin-right: 20px;
   }
   @font-face {
     font-family: "Anonymous";
