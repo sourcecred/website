@@ -3,6 +3,10 @@
     width: 256px;
     margin: 0px auto;
   }
+  #topline {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
   body {
     background-color: #0b1219;
     color: #FAD9D4;
@@ -22,14 +26,13 @@
     font-size: 40px;
   }
   h3 {
-    font-size: 36px;
+    font-size: 20px;
   }
   p {
     font-size: 14px;
     text-align: left;
   }
   .container {
-    max-width: 720px;
     margin: 20px auto;
     text-align: center;
   }
@@ -40,4 +43,24 @@
   @font-face {
     font-family: "Anonymous";
     src: url("./fonts/anonymous_pro.ttf") format("truetype");
+  }
+
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  .card {
+    border: 1px solid white;
+    border-radius: .25rem;
+    padding: 12px;
+  }
+  .card h3 {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+  }
+  .card p {
+    margin: 0;
   }
