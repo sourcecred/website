@@ -46,8 +46,42 @@ export function miniSettings(): RenderSettings {
     midColor: "#e7a59a",
     edgeColor: "#87738c",
     computes,
-    weights
+    weights,
+    reverse: false
   };
+}
+
+export function dataSettings(): RenderSettings {
+  const computes = [spiral(4), spiral(4), spiral(4)];
+  const weights = [
+    { fixed: 0, variable: 1 },
+    { fixed: 0, variable: 2 },
+    { fixed: 2, variable: 1 }
+  ];
+  return {
+    pupil: 0.35,
+    rayWidth: 0.5,
+    nRays: 40,
+    backgroundColor: "#20364a",
+    baseColor: "#ffbc95",
+    midColor: "#e7a59a",
+    edgeColor: "#87738c",
+    computes,
+    weights,
+    reverse: false
+  };
+}
+
+function Section(props: {| +settings?: RenderSettings, +children: any |}) {
+  const settings = props.settings || miniSettings();
+  const settingsReverse = { ...settings, reverse: !settings.reverse };
+  return (
+    <h3>
+      <MiniLogo size={32} settings={settings} />
+      {props.children}
+      <MiniLogo size={32} settings={settingsReverse} />
+    </h3>
+  );
 }
 
 export class Landing extends React.Component<{}> {
@@ -65,40 +99,34 @@ export class Landing extends React.Component<{}> {
         </p>
         <p>Everyone who participates in the project earns cred.</p>
 
-        <h3>
-          <MiniLogo size={32} settings={miniSettings()} />
-          Data Driven
-        </h3>
+        <Section settings={dataSettings()}>Data Driven</Section>
         <p>
           Every contribution is counted, from the biggest redesign to the
           smallest typo fix. First-pass scores are calculated using the
           [PageRank algorithm].
         </p>
 
-        <h3>Intersubjective</h3>
+        <Section>Intersubjective</Section>
         <p>
           No algorithm can capture all the nuances of what makes a project
           successful. That's why everyone in the community helps set priorities,
           recognize important contributions, and calibrate the weights.
         </p>
 
-        <h3>Transparent</h3>
+        <Section>Transparent</Section>
         <p>
           You can always see what the cred scores, and, more importantly, how
           they were calculated.
         </p>
 
-        <h3>
-          <img src={favicon} />
-          Extensible
-        </h3>
+        <Section>Extensible</Section>
         <p>
           Out of the box, SourceCred operates on data from GitHub. It's built
           around a plugin system, so you can extend it to track any
           contributions you can imagine.
         </p>
 
-        <h3>Decentralized</h3>
+        <Section>Decentralized</Section>
         <p>
           There's no "CredHub"; just an open-source system that anyone can setup
           and use.

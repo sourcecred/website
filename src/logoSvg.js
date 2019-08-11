@@ -22,7 +22,8 @@ export function render(g: any, size: number, settings: RenderSettings) {
     backgroundColor,
     baseColor,
     midColor,
-    edgeColor
+    edgeColor,
+    reverse
   } = settings;
 
   const backgroundRadius = (size / Math.sqrt(2)) * 0.7;
@@ -43,9 +44,10 @@ export function render(g: any, size: number, settings: RenderSettings) {
   const width = (TAU / nRays) * rayWidth;
 
   const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
+  const reverseMult = reverse ? 1 : -1;
   const arc = d3Arc()
-    .startAngle(d => (-d.i / nRays) * TAU)
-    .endAngle(d => (-d.i / nRays) * TAU - width)
+    .startAngle(d => ((reverseMult * d.i) / nRays) * TAU)
+    .endAngle(d => ((reverseMult * d.i) / nRays) * TAU - width)
     .innerRadius(d => toPix(d.y0))
     .outerRadius(d => toPix(d.y1));
 

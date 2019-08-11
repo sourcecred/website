@@ -32,7 +32,8 @@ export function canvasRender(
     edgeColor,
     nRays,
     computes,
-    weights
+    weights,
+    reverse
   } = renderSettings;
 
   function setupCanvas(canvas: HTMLCanvasElement) {
@@ -60,9 +61,10 @@ export function canvasRender(
   const rayWidthRadians = (TAU / nRays) * rayWidth;
 
   const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
+  const reverseMult = reverse ? 1 : -1;
   const arc = d3Arc()
-    .startAngle(d => (-d.i / nRays) * TAU)
-    .endAngle(d => (-d.i / nRays) * TAU - rayWidthRadians)
+    .startAngle(d => ((reverseMult * d.i) / nRays) * TAU)
+    .endAngle(d => ((reverseMult * d.i) / nRays) * TAU - rayWidthRadians)
     .innerRadius(d => toPix(d.y0))
     .outerRadius(d => toPix(d.y1))
     .context(ctx);

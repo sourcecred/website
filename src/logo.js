@@ -22,7 +22,9 @@ export type RenderSettings = {|
   backgroundColor: string,
   baseColor: string,
   midColor: string,
-  edgeColor: string
+  edgeColor: string,
+
+  reverse: boolean
 |};
 
 export type Datum = {|

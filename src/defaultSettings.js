@@ -19,6 +19,7 @@ export function defaultSettings(): RenderSettings {
     midColor: "#e7a59a",
     edgeColor: "#87738c",
     computes,
-    weights
+    weights,
+    reverse: false
   };
 }
