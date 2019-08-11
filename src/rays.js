@@ -6,7 +6,12 @@ const TAU = 2 * Math.PI;
 
 export function spiral(periods: number, offset: ?Radians): RayCompute {
   offset = offset || 0;
+  const reverse = periods < 0;
+  periods = Math.abs(periods);
   return function(i, rot, nRays) {
+    if (reverse) {
+      i = nRays - i;
+    }
     const periodLength = nRays / periods;
     const rotIndex = ((offset + rot) / TAU) * nRays;
     const r0 = Math.floor(rotIndex) + i;
@@ -15,11 +20,6 @@ export function spiral(periods: number, offset: ?Radians): RayCompute {
     const rem = rotIndex - Math.floor(rotIndex);
     return f(r0) * (1 - rem) + f(r1) * rem;
   };
-}
-
-export function spiralReverse(periods: number, offset: ?Radians): RayCompute {
-  const s = spiral(periods, offset);
-  return (i, rot, nRays) => s(nRays - i, rot, nRays);
 }
 
 export function constant(k: number): RayCompute {
