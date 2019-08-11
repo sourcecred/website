@@ -32,7 +32,7 @@ export function sin(periods: number, offset: ?Radians): RayCompute {
   return function(i, rot, nRays) {
     const periodLength = Math.floor(nRays / periods);
     const x = (i / periodLength) * TAU;
-    return Math.sin(x + rot) / 2 + 0.5;
+    return Math.sin(x + rot + offset) / 2 + 0.5;
   };
 }
 export function cos(periods: number, offset: ?Radians): RayCompute {
