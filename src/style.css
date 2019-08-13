@@ -34,6 +34,7 @@
   }
   .container {
     margin: 20px auto;
+    max-width: 900px;
     text-align: center;
   }
   .sectionText {
@@ -53,9 +54,10 @@
     margin-right: 40px;
   }
   .card {
-    border: 1px solid white;
+    border: 1px solid #87738c;
     border-radius: .25rem;
     padding: 12px;
+    background-color: #111c27;
   }
   .card h3 {
     margin-block-start: 0.5em;

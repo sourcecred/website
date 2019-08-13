@@ -14,7 +14,7 @@ export function defaultSettings(): RenderSettings {
     pupil: 0.4,
     rayWidth: 0.75,
     nRays: 40,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",

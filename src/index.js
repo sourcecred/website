@@ -12,6 +12,7 @@ import { Wrapper } from "./wrapper";
 import { type RenderSettings } from "./logo";
 import { spiral, cos, sin } from "./rays";
 
+const TAU = Math.PI * 2;
 class MiniLogo extends React.Component<{|
   size: number,
   settings?: RenderSettings
@@ -36,7 +37,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.35,
     rayWidth: 0.65,
     nRays: 70,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -53,7 +54,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.35,
     rayWidth: 0.2,
     nRays: 60,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -70,7 +71,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.35,
     rayWidth: 0.5,
     nRays: 80,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -87,7 +88,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.35,
     rayWidth: 0.85,
     nRays: 77,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -104,7 +105,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.45,
     rayWidth: 1,
     nRays: 80,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -120,7 +121,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     pupil: 0.35,
     rayWidth: 0.9,
     nRays: 120,
-    backgroundColor: "#20364a",
+    backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
@@ -216,8 +217,7 @@ export class Landing extends React.Component<{}> {
             title="Intersubjective"
           >
             <p>
-              SourceCred mixes objective data about contributions with
-              subjective human judgements of what matters, and why.
+              Scores are a blend of objective data and subjective judgement.
             </p>
           </Card>
         </div>
