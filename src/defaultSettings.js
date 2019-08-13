@@ -18,6 +18,7 @@ export function defaultSettings(): RenderSettings {
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes,
     weights,
     reverse: false

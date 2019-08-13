@@ -40,6 +40,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [spiral(2), spiral(2), spiral(2)],
     weights: [
       { fixed: 0, variable: 1 },
@@ -56,6 +57,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [spiral(-30), spiral(-15), spiral(-30)],
     weights: [
       { fixed: 1, variable: 1 },
@@ -72,6 +74,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [cos(4), cos(8), cos(4)],
     weights: [
       { fixed: 0, variable: 1 },
@@ -88,6 +91,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [sin(3), sin(7, Math.PI), sin(7)],
     weights: [
       { fixed: 1, variable: 0 },
@@ -104,7 +108,7 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
-    computes: [sin(4), sin(4, Math.PI), spiral(4)],
+    computes: [sin(1), sin(1, Math.PI), spiral(4)],
     weights: [
       { fixed: 0.5, variable: 1 },
       { fixed: 0, variable: 1 },
@@ -114,12 +118,13 @@ const settings: { [string]: RenderSettings } = deepFreeze({
   },
   sectionIntersubjective: {
     pupil: 0.35,
-    rayWidth: 0.8,
+    rayWidth: 0.9,
     nRays: 120,
     backgroundColor: "#20364a",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [cos(6), cos(7), spiral(6)],
     weights: [
       { fixed: 1, variable: 0 },

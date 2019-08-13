@@ -33,7 +33,8 @@ export function canvasRender(
     nRays,
     computes,
     weights,
-    reverse
+    reverse,
+    pupilColor
   } = renderSettings;
 
   function setupCanvas(canvas: HTMLCanvasElement) {
@@ -78,7 +79,6 @@ export function canvasRender(
     ctx.fill();
     ctx.closePath();
 
-    const pupilColor = "#111c27";
     ctx.fillStyle = pupilColor;
     ctx.strokeStyle = pupilColor;
     ctx.beginPath();

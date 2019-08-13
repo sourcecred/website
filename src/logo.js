@@ -23,6 +23,7 @@ export type RenderSettings = {|
   baseColor: string,
   midColor: string,
   edgeColor: string,
+  pupilColor: string,
 
   reverse: boolean
 |};

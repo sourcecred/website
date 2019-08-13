@@ -23,6 +23,7 @@ export function render(g: any, size: number, settings: RenderSettings) {
     baseColor,
     midColor,
     edgeColor,
+    pupilColor,
     reverse
   } = settings;
 
@@ -36,6 +37,12 @@ export function render(g: any, size: number, settings: RenderSettings) {
     .append("circle")
     .attr("fill", backgroundColor)
     .attr("r", backgroundRadius);
+
+  // Add the pupil
+  internal
+    .append("circle")
+    .attr("fill", pupilColor)
+    .attr("r", backgroundRadius * pupil);
 
   const layers = ["base", "mid", "edge"];
   const color = scaleOrdinal()
