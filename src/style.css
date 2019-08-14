@@ -17,6 +17,14 @@
     padding: 0px;
     margin: 0px;
   }
+  .button-link {
+    font-size: 1.5em;
+    display: inline-block;
+    border-radius: .25rem;
+    padding: 8px;
+    background-color: #282d48;
+    color: #ffbc95;
+  }
   .down-arrow-wrapper{
     position: absolute;
     margin: 0px auto;
