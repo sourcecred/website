@@ -181,7 +181,24 @@ export class Landing extends React.Component<{}> {
           <h1 id="topline">SourceCred</h1>
           <h2 className="no-bottom-margin">a reputation protocol</h2>
           <h2 className="no-top-margin">for open collaboration</h2>
-          {downArrow(80, 20)}
+          <div className="outlinks-grid">
+            <h2>
+              <a href="https://discourse.sourcecred.io">forums</a>
+            </h2>
+            <h2>
+              <a href="https://sourcecred.io/discord-invite">chat</a>
+            </h2>
+            <h2>
+              <a href="https://github.com/sourcecred/sourcecred">github</a>
+            </h2>
+            <h2>
+              <a href="https://twitter.com/sourcecred">twitter</a>
+            </h2>
+          </div>
+          <h2>
+            <a href="https://sourcecred.io/timeline/@sourcecred/">prototype</a>
+          </h2>
+          {downArrow(80, 15)}
         </div>
 
         <h2>How SourceCred Works</h2>
