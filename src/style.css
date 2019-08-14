@@ -11,7 +11,21 @@
     background-color: #0b1219;
     color: #FAD9D4;
     font-family: 'Anonymous';
-    padding: 40px;
+    padding: 0px;
+  }
+  .down-arrow-wrapper{
+    position: absolute;
+    margin: 0px auto;
+    top: calc(100vh - 60px);
+    left: 50%;
+  }
+  .down-arrow {
+    position: relative;
+    left: -50%;
+  }
+  .down-arrow line {
+    stroke: #FAD9D4;
+    stroke-width: 1;
   }
   .no-bottom-margin {
     margin-block-end: 0;
@@ -33,9 +47,12 @@
     text-align: left;
   }
   .container {
-    margin: 20px auto;
+    margin: 0px auto;
     max-width: 900px;
     text-align: center;
+  }
+  .page {
+    height: 100vh;
   }
   .sectionText {
     margin-left: 20px;
@@ -48,10 +65,10 @@
 
   .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     grid-gap: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
   }
   .card {
     border: 1px solid #87738c;

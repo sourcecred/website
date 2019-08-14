@@ -164,19 +164,62 @@ function Card(props: {|
 
 export class Landing extends React.Component<{}> {
   render() {
+    function downArrow(width, height) {
+      return (
+        <div className="down-arrow-wrapper">
+          <svg className="down-arrow" height={height} width={width}>
+            <line x1="0" x2={width / 2} y1="0" y2={height} />
+            <line x1={width / 2} x2={width} y1={height} y2="0" />
+          </svg>
+        </div>
+      );
+    }
     return (
       <div className="container">
-        <canvas id="logo-canvas"></canvas>
-        <h1 id="topline">SourceCred</h1>
-        <h2 className="no-bottom-margin">a reputation protocol</h2>
-        <h2 className="no-top-margin">for open collaboration</h2>
+        <div className="page">
+          <canvas id="logo-canvas"></canvas>
+          <h1 id="topline">SourceCred</h1>
+          <h2 className="no-bottom-margin">a reputation protocol</h2>
+          <h2 className="no-top-margin">for open collaboration</h2>
+          {downArrow(80, 20)}
+        </div>
+
+        <h2>How SourceCred Works</h2>
+        <h3>(TODO: Replace this with an animated / visual section.)</h3>
 
         <p>
-          SourceCred creates <em>cred</em>, a project-specific reputation
-          metric.
+          Everything people do to support a project—like writing code, filing
+          bug reports, organizing meetups, or even mediating hard discussions—is
+          considered a <b>contribution</b>.
         </p>
-        <p>Everyone who participates in the project earns cred.</p>
 
+        <p>
+          These contributions are connected to each other based on their
+          relationships. For example, pull request may fix a particular bug, and
+          a code review may review that pull request.
+        </p>
+
+        <p>
+          SourceCred uses the PageRank algorithm to assign <b>cred</b> to each
+          contribution based on its connections. The basic idea is this: a
+          contribution earns cred if it is connected to other contributions that
+          earn lots of cred.
+        </p>
+
+        <p>
+          Contributors are connected to the contributions they've helped with,
+          which means that they also earn cred.
+        </p>
+
+        <p>
+          The project's community and maintainers have a lot of influence over
+          this process. They can reconfigure SourceCred weights and parameters.
+          For example, they could assign extra weight to some very important
+          contributions, or decrease the weights of contributions that seem
+          spammy. They can also add <b>heuristics</b> to do this automatically.
+        </p>
+
+        <h2>Properties</h2>
         <div className="card-container">
           <Card settings={settings.sectionDataDriven} title={"Data Driven"}>
             <p>
@@ -190,8 +233,8 @@ export class Landing extends React.Component<{}> {
             title="Community Controlled"
           >
             <p>
-              Every instance is controlled by the project's community. They set
-              the values, priorities, and the weights.
+              Each project community sets the values, priorits, weights, and
+              norms.
             </p>
           </Card>
 
