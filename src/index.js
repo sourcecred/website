@@ -153,7 +153,7 @@ function Card(props: {|
 |}) {
   return (
     <div className="card">
-      <MiniLogo size={256} settings={props.settings} />
+      <MiniLogo size={200} settings={props.settings} />
       <h3>{props.title}</h3>
       {props.children}
     </div>
