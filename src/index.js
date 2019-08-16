@@ -112,18 +112,19 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     reverse: false
   },
   sectionDecentralized: {
-    pupil: 0.45,
+    pupil: 0.35,
     rayWidth: 1,
     nRays: 80,
     backgroundColor: "#282d48",
     baseColor: "#ffbc95",
     midColor: "#e7a59a",
     edgeColor: "#87738c",
+    pupilColor: "#111c27",
     computes: [sin(1), sin(1, Math.PI), spiral(4)],
     weights: [
       { fixed: 0.5, variable: 1 },
       { fixed: 0, variable: 1 },
-      { fixed: 0, variable: 1 }
+      { fixed: 0, variable: 4 }
     ],
     reverse: false
   },
@@ -167,12 +168,14 @@ export class Landing extends React.Component<{}> {
         <div>
           <canvas id="logo-canvas"></canvas>
           <h1 id="topline">SourceCred</h1>
-          <h2 className="tagline" id="tagline-top">
-            a reputation protocol
-          </h2>
-          <h2 className="tagline" id="tagline-bottom">
-            for open collaboration
-          </h2>
+          <div id="tagline">
+            <h2 className="tagline" id="tagline-top">
+              a reputation protocol
+            </h2>
+            <h2 className="tagline" id="tagline-bottom">
+              for open collaboration
+            </h2>
+          </div>
           <div className="outlinks-grid">
             <ButtonLink href="https://discourse.sourcecred.io">
               forums
@@ -191,7 +194,7 @@ export class Landing extends React.Component<{}> {
         </div>
 
         <div id="how-sourcecred-works">
-          <h2 class="section-header">How SourceCred Works</h2>
+          <h2 class="section-header">how SourceCred works</h2>
 
           <p>
             Everything people do to support a project—like writing code, filing
@@ -232,7 +235,7 @@ export class Landing extends React.Component<{}> {
           </p>
         </div>
 
-        <h2 class="section-header">Properties</h2>
+        <h2 class="section-header">properties</h2>
         <div className="card-container">
           <Card settings={settings.sectionDataDriven} title={"Data Driven"}>
             <p>
