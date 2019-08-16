@@ -67,7 +67,7 @@ export function canvasRender(
     .startAngle(d => ((reverseMult * d.i) / nRays) * TAU)
     .endAngle(d => ((reverseMult * d.i) / nRays) * TAU - rayWidthRadians)
     .innerRadius(d => toPix(d.y0))
-    .outerRadius(d => toPix(d.y1))
+    .outerRadius(d => toPix(d.y1) + 1)
     .context(ctx);
 
   const redraw = data => {
@@ -103,5 +103,5 @@ export function canvasRender(
   const redrawForOffset = o => redraw(gen(o));
   let offset = 0;
   redrawForOffset(offset);
-  interval(() => redrawForOffset((offset += 0.002)), 16);
+  interval(() => redrawForOffset((offset += 0.001)), 16);
 }
