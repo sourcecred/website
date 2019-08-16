@@ -43,6 +43,7 @@ module.exports = {
       template: "./src/discord-invite.html",
       filename: "./discord-invite/index.html"
     }),
-    new CopyPlugin([{ from: "./src/favicon.png", to: "favicon.png" }])
+    new CopyPlugin([{ from: "./src/favicon.png", to: "favicon.png" }]),
+    new CopyPlugin([{ from: "./src/CNAME", to: "CNAME" }])
   ]
 };
