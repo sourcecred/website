@@ -41,12 +41,15 @@
     margin-block-start: 0;
   }
   h1 {
-    font-size: 3em;
+    font-family: 'Anonymous';
+    font-size: 4em;
   }
   h2 {
+    font-family: 'Anonymous';
     font-size: 2.5em;
   }
   h3 {
+    font-family: 'Anonymous';
     font-size: 1.7em;
   }
   p {
