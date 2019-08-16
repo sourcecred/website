@@ -146,18 +146,6 @@ const settings: { [string]: RenderSettings } = deepFreeze({
   }
 });
 
-function Section(props: {| +settings: RenderSettings, +children: any |}) {
-  const settings = props.settings;
-  const settingsReverse = { ...settings, reverse: !settings.reverse };
-  return (
-    <h3>
-      <MiniLogo size={48} settings={settings} />
-      <span className="sectionText">{props.children}</span>
-      <MiniLogo size={48} settings={settingsReverse} />
-    </h3>
-  );
-}
-
 function Card(props: {|
   +settings: RenderSettings,
   title: string,
@@ -165,7 +153,7 @@ function Card(props: {|
 |}) {
   return (
     <div className="card">
-      <MiniLogo size={128} settings={props.settings} />
+      <MiniLogo size={256} settings={props.settings} />
       <h3>{props.title}</h3>
       {props.children}
     </div>
