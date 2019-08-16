@@ -19,14 +19,14 @@
   }
   .button-link {
     min-width: 120px;
-    margin-top: 10px;
+    margin-top: 20px;
     font-size: 1.7em;
     display: inline-block;
-    border-radius: .25rem;
-    padding: 8px;
+    border-radius: 1rem;
+    padding: 12px;
     background-color: #282d48;
     color: #ffbc95;
-    border: 1px solid #e7a59a;
+    border: 2px solid #e7a59a;
     font-family: 'Anonymous';
   }
   .tagline {
