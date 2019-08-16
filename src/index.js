@@ -204,7 +204,7 @@ export class Landing extends React.Component<{}> {
 
           <p>
             These contributions are connected to each other based on their
-            relationships. For example, pull request may fix a particular bug,
+            relationships. For example, a pull request may fix a particular bug,
             and a code review may review that pull request.
           </p>
 
@@ -249,7 +249,7 @@ export class Landing extends React.Component<{}> {
             title="Community Controlled"
           >
             <p>
-              Each project community sets the values, priorits, weights, and
+              Each project community sets the values, priorities, weights, and
               norms.
             </p>
           </Card>
@@ -268,7 +268,7 @@ export class Landing extends React.Component<{}> {
           <Card settings={settings.sectionDecentralized} title="Decentralized">
             <p>
               There's no "CredHub"; just an open-source system that anyone can
-              setup and use.
+              set up and use.
             </p>
           </Card>
           <Card
