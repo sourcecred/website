@@ -162,16 +162,6 @@ function Card(props: {|
 
 export class Landing extends React.Component<{}> {
   render() {
-    function downArrow(width, height) {
-      return (
-        <div className="down-arrow-wrapper">
-          <svg className="down-arrow" height={height} width={width}>
-            <line x1="0" x2={width / 2} y1="0" y2={height} />
-            <line x1={width / 2} x2={width} y1={height} y2="0" />
-          </svg>
-        </div>
-      );
-    }
     return (
       <div className="container">
         <div>

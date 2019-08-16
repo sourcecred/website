@@ -6,7 +6,7 @@ import { select } from "d3-selection";
 import { scaleOrdinal } from "d3-scale";
 import { interpolate } from "d3-interpolate";
 import { interval } from "d3-timer";
-import { sum } from "d3-array";
+import { sum, range } from "d3-array";
 import "d3-transition";
 
 export type Radians = number;
@@ -75,19 +75,4 @@ export function dataGen(
       });
     });
   };
-}
-
-function range(n) {
-  const ret = [];
-  for (let i = 0; i < n; i++) {
-    ret.push(i);
-  }
-  return ret;
-}
-function spiralLength(n) {
-  return range(n).map(x => x / (n - 1));
-}
-
-function spiralLengthNever0(n) {
-  return range(n).map(x => (x + 1) / n);
 }
