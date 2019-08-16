@@ -189,8 +189,12 @@ export class Landing extends React.Component<{}> {
         <div>
           <canvas id="logo-canvas"></canvas>
           <h1 id="topline">SourceCred</h1>
-          <h2 className="no-bottom-margin">a reputation protocol</h2>
-          <h2 className="no-top-margin">for open collaboration</h2>
+          <h2 className="tagline" id="tagline-top">
+            a reputation protocol
+          </h2>
+          <h2 className="tagline" id="tagline-bottom">
+            for open collaboration
+          </h2>
           <div className="outlinks-grid">
             <ButtonLink href="https://discourse.sourcecred.io">
               forums
@@ -210,40 +214,48 @@ export class Landing extends React.Component<{}> {
           </ButtonLink>
         </div>
 
-        <h2>How SourceCred Works</h2>
-        <h3>(TODO: Replace this with an animated / visual section.)</h3>
+        <div id="how-sourcecred-works">
+          <h2>How SourceCred Works</h2>
 
-        <p>
-          Everything people do to support a project—like writing code, filing
-          bug reports, organizing meetups, or even mediating hard discussions—is
-          considered a <b>contribution</b>.
-        </p>
+          <p>
+            Everything people do to support a project—like writing code, filing
+            bug reports, organizing meetups, or even mediating hard
+            discussions—is considered a <b>contribution</b>.
+          </p>
 
-        <p>
-          These contributions are connected to each other based on their
-          relationships. For example, pull request may fix a particular bug, and
-          a code review may review that pull request.
-        </p>
+          <p>
+            These contributions are connected to each other based on their
+            relationships. For example, pull request may fix a particular bug,
+            and a code review may review that pull request.
+          </p>
 
-        <p>
-          SourceCred uses the PageRank algorithm to assign <b>cred</b> to each
-          contribution based on its connections. The basic idea is this: a
-          contribution earns cred if it is connected to other contributions that
-          earn lots of cred.
-        </p>
+          <p>
+            This network of contributions and relationships form a{" "}
+            <b>contribution graph</b>, the principal data structure of
+            SourceCred. SourceCred applies the{" "}
+            <a href="https://en.wikipedia.org/wiki/PageRank">
+              PageRank algorithm
+            </a>
+            to this graph, generating a score, called <b>cred</b> for every
+            contribution.
+          </p>
 
-        <p>
-          Contributors are connected to the contributions they've helped with,
-          which means that they also earn cred.
-        </p>
+          <p>
+            The basic idea is this: a contribution earns cred if it is connected
+            to other contributions that earn lots of cred. Contributors are
+            connected to the contributions they've helped with, which means that
+            they also earn cred.
+          </p>
 
-        <p>
-          The project's community and maintainers have a lot of influence over
-          this process. They can reconfigure SourceCred weights and parameters.
-          For example, they could assign extra weight to some very important
-          contributions, or decrease the weights of contributions that seem
-          spammy. They can also add <b>heuristics</b> to do this automatically.
-        </p>
+          <p>
+            The project's community and maintainers have a lot of influence over
+            this process. They can reconfigure SourceCred weights and
+            parameters. For example, they could assign extra weight to some very
+            important contributions, or decrease the weights of contributions
+            that seem spammy. They can also add <b>heuristics</b> to do this
+            automatically.
+          </p>
+        </div>
 
         <h2>Properties</h2>
         <div className="card-container">
