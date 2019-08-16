@@ -191,7 +191,7 @@ export class Landing extends React.Component<{}> {
         </div>
 
         <div id="how-sourcecred-works">
-          <h2>How SourceCred Works</h2>
+          <h2 class="section-header">How SourceCred Works</h2>
 
           <p>
             Everything people do to support a project—like writing code, filing
@@ -207,18 +207,17 @@ export class Landing extends React.Component<{}> {
 
           <p>
             This network of contributions and relationships form a{" "}
-            <b>contribution graph</b>, the principal data structure of
-            SourceCred. SourceCred applies the{" "}
+            <b>contribution graph</b>. SourceCred applies the{" "}
             <a href="https://en.wikipedia.org/wiki/PageRank">
               PageRank algorithm
-            </a>
+            </a>{" "}
             to this graph, generating a score, called <b>cred</b> for every
             contribution.
           </p>
 
           <p>
-            The basic idea is this: a contribution earns cred if it is connected
-            to other contributions that earn lots of cred. Contributors are
+            The basic idea is: a contribution earns cred if it is connected to
+            other contributions that earn lots of cred. Contributors are
             connected to the contributions they've helped with, which means that
             they also earn cred.
           </p>
@@ -233,7 +232,7 @@ export class Landing extends React.Component<{}> {
           </p>
         </div>
 
-        <h2>Properties</h2>
+        <h2 class="section-header">Properties</h2>
         <div className="card-container">
           <Card settings={settings.sectionDataDriven} title={"Data Driven"}>
             <p>
