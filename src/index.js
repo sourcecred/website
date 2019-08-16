@@ -187,7 +187,7 @@ export class Landing extends React.Component<{}> {
             <ButtonLink href="https://twitter.com/sourcecred">
               twitter
             </ButtonLink>
-            <ButtonLink href="https://sourcecred.io/timeline/@sourcecred/">
+            <ButtonLink href="https://sourcecred.io/cred/timeline/@sourcecred/">
               prototype
             </ButtonLink>
           </div>
