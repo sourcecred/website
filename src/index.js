@@ -199,9 +199,7 @@ export class Landing extends React.Component<{}> {
             <ButtonLink href="https://discourse.sourcecred.io">
               forums
             </ButtonLink>
-            <ButtonLink href="https://sourcecred.io/discord-invite">
-              chat
-            </ButtonLink>
+            <ButtonLink href="https://discord.gg/tsBTgc9">chat</ButtonLink>
             <ButtonLink href="https://github.com/sourcecred/sourcecred">
               github
             </ButtonLink>
