@@ -186,7 +186,7 @@ export class Landing extends React.Component<{}> {
     }
     return (
       <div className="container">
-        <div className="page">
+        <div>
           <canvas id="logo-canvas"></canvas>
           <h1 id="topline">SourceCred</h1>
           <h2 className="no-bottom-margin">a reputation protocol</h2>
@@ -208,7 +208,6 @@ export class Landing extends React.Component<{}> {
           <ButtonLink href="https://sourcecred.io/timeline/@sourcecred/">
             prototype
           </ButtonLink>
-          {downArrow(80, 15)}
         </div>
 
         <h2>How SourceCred Works</h2>
