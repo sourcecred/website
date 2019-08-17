@@ -25,13 +25,13 @@ export type RenderSettings = {|
   edgeColor: string,
   pupilColor: string,
 
-  reverse: boolean
+  reverse: boolean,
 |};
 
 export type Datum = {|
   +i: number,
   +y0: number,
-  +y1: number
+  +y1: number,
 |};
 export type LogoData = Datum[][];
 // Compute the height of a ray given the index, and the number of rays
@@ -45,19 +45,19 @@ export type RayWeight = {|
   // How much is given to this raygroup as "fixed" (i.e. present when the computed output is 0)
   +fixed: number,
   // How much is given to this rayGroup as variable
-  +variable: number
+  +variable: number,
 |};
 
 export function dataGen(
   nRays: number,
   computes: RayCompute[],
   weights: RayWeight[]
-): number => LogoData {
+): (number) => LogoData {
   if (computes.length !== 3) {
     throw new Error("wrong number of computes");
   }
-  const fixed = weights.map(x => x.fixed);
-  const variable = weights.map(x => x.variable);
+  const fixed = weights.map((x) => x.fixed);
+  const variable = weights.map((x) => x.variable);
   const totalWeight = sum(fixed) + sum(variable);
   return function(rot: number): LogoData {
     rot = rot % (Math.PI * 2);
@@ -65,7 +65,7 @@ export function dataGen(
     return computes.map((c, cIndex) => {
       const thisFixed = fixed[cIndex];
       const thisVariable = variable[cIndex];
-      return range(nRays).map(i => {
+      return range(nRays).map((i) => {
         const raySize =
           (c(i, rot, nRays) * thisVariable + thisFixed) / totalWeight;
         const y0 = lastHeight[i];

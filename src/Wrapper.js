@@ -7,7 +7,7 @@ import { select } from "d3-selection";
 export type Props = {|
   generator: (g: any) => void,
   x: number,
-  y: number
+  y: number,
 |};
 
 export class Wrapper extends React.Component<Props> {

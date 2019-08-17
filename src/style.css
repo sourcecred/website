@@ -5,15 +5,16 @@
 a:link {
   color: #e7a59a;
 }
-a:visited{
-  color: #CD828F;
+a:visited {
+  color: #cd828f;
 }
 body {
   background-color: #0b1219;
-  color: #FAD9D4;
+  color: #fad9d4;
   padding: 0px;
   margin: 0px;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 .button-link {
   min-width: 120px;
@@ -24,10 +25,10 @@ body {
   background-color: #282d48;
   color: #ffbc95;
   border: 2px solid #e7a59a;
-  font-family: 'Anonymous';
+  font-family: "Anonymous";
 }
 #tagline {
-  font-family: 'Anonymous';
+  font-family: "Anonymous";
   line-height: 1;
   margin: 20px auto;
 }
@@ -38,13 +39,13 @@ body {
 }
 
 h1 {
-  font-family: 'Anonymous';
+  font-family: "Anonymous";
 }
 h2 {
-  font-family: 'Anonymous';
+  font-family: "Anonymous";
 }
 h3 {
-  font-family: 'Anonymous';
+  font-family: "Anonymous";
   text-transform: lowercase;
 }
 p {
@@ -83,7 +84,7 @@ p {
 }
 .card {
   border: 1px solid #87738c;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   padding: 12px;
   background-color: #111c27;
 }

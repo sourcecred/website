@@ -16,7 +16,7 @@ import {
   type LogoData,
   dataGen,
   type RayWeight,
-  type RenderSettings
+  type RenderSettings,
 } from "./logo";
 
 export function canvasRender(
@@ -34,7 +34,7 @@ export function canvasRender(
     computes,
     weights,
     reverse,
-    pupilColor
+    pupilColor,
   } = renderSettings;
 
   function setupCanvas(canvas: HTMLCanvasElement) {
@@ -61,16 +61,16 @@ export function canvasRender(
   const colors = [baseColor, midColor, edgeColor];
   const rayWidthRadians = (TAU / nRays) * rayWidth;
 
-  const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
+  const toPix = (x) => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
   const reverseMult = reverse ? 1 : -1;
   const arc = d3Arc()
-    .startAngle(d => ((reverseMult * d.i) / nRays) * TAU)
-    .endAngle(d => ((reverseMult * d.i) / nRays) * TAU - rayWidthRadians)
-    .innerRadius(d => toPix(d.y0))
-    .outerRadius(d => toPix(d.y1) + 1)
+    .startAngle((d) => ((reverseMult * d.i) / nRays) * TAU)
+    .endAngle((d) => ((reverseMult * d.i) / nRays) * TAU - rayWidthRadians)
+    .innerRadius((d) => toPix(d.y0))
+    .outerRadius((d) => toPix(d.y1) + 1)
     .context(ctx);
 
-  const redraw = data => {
+  const redraw = (data) => {
     // Add background circle
     ctx.fillStyle = backgroundColor;
     ctx.strokeStyle = "#3f6385";
@@ -90,7 +90,7 @@ export function canvasRender(
       ctx.strokeStyle = colors[i];
       ctx.fillStyle = colors[i];
 
-      layer.forEach(x => {
+      layer.forEach((x) => {
         ctx.beginPath();
         arc(x);
         ctx.fill();
@@ -100,7 +100,7 @@ export function canvasRender(
   };
 
   const gen = dataGen(nRays, computes, weights);
-  const redrawForOffset = o => redraw(gen(o));
+  const redrawForOffset = (o) => redraw(gen(o));
   let offset = 0;
   redrawForOffset(offset);
   interval(() => redrawForOffset((offset += 0.001)), 16);

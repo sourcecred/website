@@ -16,7 +16,7 @@ export function spiral(periods: number, offset: ?Radians): RayCompute {
     const rotIndex = ((offset + rot) / TAU) * nRays;
     const r0 = Math.floor(rotIndex) + i;
     const r1 = Math.ceil(rotIndex) + i;
-    const f = x => (periodLength - (x % periodLength)) / periodLength;
+    const f = (x) => (periodLength - (x % periodLength)) / periodLength;
     const rem = rotIndex - Math.floor(rotIndex);
     return f(r0) * (1 - rem) + f(r1) * rem;
   };
