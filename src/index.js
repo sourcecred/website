@@ -8,7 +8,7 @@ import { render as svgRender } from "./logoSvg";
 import { defaultSettings } from "./defaultSettings";
 import "./style.css";
 import favicon from "./favicon.png";
-import { Wrapper } from "./wrapper";
+import { Wrapper } from "./Wrapper";
 import { type RenderSettings } from "./logo";
 import { spiral, cos, sin } from "./rays";
 
