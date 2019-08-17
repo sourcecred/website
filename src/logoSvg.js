@@ -61,7 +61,9 @@ export function render(g: any, size: number, settings: RenderSettings) {
       .enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (d) => color(layer));
+      .attr("fill", (d) => color(layer))
+      .attr("data-layer", layer)
+      .classed("logo-ray", true);
   }
 
   // Add the pupil
