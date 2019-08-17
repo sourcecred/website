@@ -38,12 +38,6 @@ export function render(g: any, size: number, settings: RenderSettings) {
     .attr("fill", backgroundColor)
     .attr("r", backgroundRadius);
 
-  // Add the pupil
-  internal
-    .append("circle")
-    .attr("fill", pupilColor)
-    .attr("r", backgroundRadius * pupil);
-
   const layers = ["base", "mid", "edge"];
   const color = scaleOrdinal()
     .domain(layers)
@@ -55,18 +49,24 @@ export function render(g: any, size: number, settings: RenderSettings) {
   const arc = d3Arc()
     .startAngle((d) => ((reverseMult * d.i) / nRays) * TAU)
     .endAngle((d) => ((reverseMult * d.i) / nRays) * TAU - width)
-    .innerRadius((d) => toPix(d.y0))
+    .innerRadius((d) => 0)
     .outerRadius((d) => toPix(d.y1));
 
-  layers.forEach((layer, layer_index) => {
+  for (let i = layers.length - 1; i >= 0; i--) {
+    const layer = layers[i];
     const rays = internal
       .selectAll(`.ray-${layer}`)
-      .data(data[layer_index], (d) => d.i + "-" + layer);
-
+      .data(data[i], (d) => d.i + "-" + layer);
     rays
       .enter()
       .append("path")
       .attr("d", arc)
       .attr("fill", (d) => color(layer));
-  });
+  }
+
+  // Add the pupil
+  internal
+    .append("circle")
+    .attr("fill", pupilColor)
+    .attr("r", backgroundRadius * pupil);
 }
