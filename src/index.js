@@ -194,7 +194,7 @@ export class Landing extends React.Component<{}> {
         </div>
 
         <div id="how-sourcecred-works">
-          <h2 class="section-header">how SourceCred works</h2>
+          <h2 className="section-header">how SourceCred works</h2>
 
           <p>
             Everything people do to support a project—like writing code, filing
@@ -235,7 +235,7 @@ export class Landing extends React.Component<{}> {
           </p>
         </div>
 
-        <h2 class="section-header">properties</h2>
+        <h2 className="section-header">properties</h2>
         <div className="card-container">
           <Card settings={settings.sectionDataDriven} title={"Data Driven"}>
             <p>
