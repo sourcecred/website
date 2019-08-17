@@ -8,7 +8,7 @@ export function defaultSettings(): RenderSettings {
   const weights = [
     { fixed: 2, variable: 1 },
     { fixed: 2, variable: 6 },
-    { fixed: 3, variable: 4 }
+    { fixed: 3, variable: 4 },
   ];
   return {
     pupil: 0.4,
@@ -21,6 +21,6 @@ export function defaultSettings(): RenderSettings {
     pupilColor: "#111c27",
     computes,
     weights,
-    reverse: false
+    reverse: false,
   };
 }

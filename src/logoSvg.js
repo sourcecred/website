@@ -24,7 +24,7 @@ export function render(g: any, size: number, settings: RenderSettings) {
     midColor,
     edgeColor,
     pupilColor,
-    reverse
+    reverse,
   } = settings;
 
   const backgroundRadius = (size / Math.sqrt(2)) * 0.7;
@@ -50,23 +50,23 @@ export function render(g: any, size: number, settings: RenderSettings) {
     .range([baseColor, midColor, edgeColor]);
   const width = (TAU / nRays) * rayWidth;
 
-  const toPix = x => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
+  const toPix = (x) => (x * (1 - pupil) * 0.9 + pupil) * backgroundRadius;
   const reverseMult = reverse ? 1 : -1;
   const arc = d3Arc()
-    .startAngle(d => ((reverseMult * d.i) / nRays) * TAU)
-    .endAngle(d => ((reverseMult * d.i) / nRays) * TAU - width)
-    .innerRadius(d => toPix(d.y0))
-    .outerRadius(d => toPix(d.y1));
+    .startAngle((d) => ((reverseMult * d.i) / nRays) * TAU)
+    .endAngle((d) => ((reverseMult * d.i) / nRays) * TAU - width)
+    .innerRadius((d) => toPix(d.y0))
+    .outerRadius((d) => toPix(d.y1));
 
   layers.forEach((layer, layer_index) => {
     const rays = internal
       .selectAll(`.ray-${layer}`)
-      .data(data[layer_index], d => d.i + "-" + layer);
+      .data(data[layer_index], (d) => d.i + "-" + layer);
 
     rays
       .enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", d => color(layer));
+      .attr("fill", (d) => color(layer));
   });
 }

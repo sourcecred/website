@@ -15,7 +15,7 @@ import { spiral, cos, sin } from "./rays";
 const TAU = Math.PI * 2;
 class MiniLogo extends React.Component<{|
   size: number,
-  settings?: RenderSettings
+  settings?: RenderSettings,
 |}> {
   render() {
     const size = this.props.size;
@@ -56,9 +56,9 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 0, variable: 1 },
       { fixed: 0, variable: 1 },
-      { fixed: 0, variable: 1 }
+      { fixed: 0, variable: 1 },
     ],
-    reverse: false
+    reverse: false,
   },
   sectionTransparent: {
     pupil: 0.35,
@@ -73,9 +73,9 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 1, variable: 1 },
       { fixed: 1, variable: 1 },
-      { fixed: 1, variable: 1 }
+      { fixed: 1, variable: 1 },
     ],
-    reverse: false
+    reverse: false,
   },
   sectionExtensible: {
     pupil: 0.35,
@@ -90,9 +90,9 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 0, variable: 1 },
       { fixed: 0, variable: 1 },
-      { fixed: 0, variable: 2 }
+      { fixed: 0, variable: 2 },
     ],
-    reverse: false
+    reverse: false,
   },
   sectionCommunity: {
     pupil: 0.35,
@@ -107,9 +107,9 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 1, variable: 0 },
       { fixed: 0, variable: 2 },
-      { fixed: 0, variable: 1 }
+      { fixed: 0, variable: 1 },
     ],
-    reverse: false
+    reverse: false,
   },
   sectionDecentralized: {
     pupil: 0.35,
@@ -124,9 +124,9 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 0.5, variable: 1 },
       { fixed: 0, variable: 1 },
-      { fixed: 0, variable: 4 }
+      { fixed: 0, variable: 4 },
     ],
-    reverse: false
+    reverse: false,
   },
   sectionIntersubjective: {
     pupil: 0.35,
@@ -141,16 +141,16 @@ const settings: { [string]: RenderSettings } = deepFreeze({
     weights: [
       { fixed: 1, variable: 0 },
       { fixed: 0, variable: 2 },
-      { fixed: 0, variable: 3 }
+      { fixed: 0, variable: 3 },
     ],
-    reverse: false
-  }
+    reverse: false,
+  },
 });
 
 function Card(props: {|
   +settings: RenderSettings,
   title: string,
-  children: any
+  children: any,
 |}) {
   return (
     <div className="card">

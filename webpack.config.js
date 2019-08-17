@@ -9,41 +9,41 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.html$/,
-        use: { loader: "html-loader" }
+        use: { loader: "html-loader" },
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: {
-          loader: "file-loader"
-        }
+          loader: "file-loader",
+        },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: {
-          loader: "file-loader"
-        }
-      }
-    ]
+          loader: "file-loader",
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebPackPlugin({
       template: "./src/index.html",
-      filename: "./index.html"
+      filename: "./index.html",
     }),
     new HtmlWebPackPlugin({
       template: "./src/discord-invite.html",
-      filename: "./discord-invite/index.html"
+      filename: "./discord-invite/index.html",
     }),
     new CopyPlugin([{ from: "./src/favicon.png", to: "favicon.png" }]),
-    new CopyPlugin([{ from: "./src/CNAME", to: "CNAME" }])
-  ]
+    new CopyPlugin([{ from: "./src/CNAME", to: "CNAME" }]),
+  ],
 };
