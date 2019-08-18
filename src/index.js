@@ -3,7 +3,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import deepFreeze from "deep-freeze";
-import { canvasRender } from "./logoCanvas";
 import { render as svgRender } from "./logoSvg";
 import { defaultSettings } from "./defaultSettings";
 import "./style.css";
@@ -16,6 +15,7 @@ const TAU = Math.PI * 2;
 class MiniLogo extends React.Component<{|
   size: number,
   settings?: RenderSettings,
+  className?: string,
 |}> {
   render() {
     const size = this.props.size;
@@ -25,7 +25,7 @@ class MiniLogo extends React.Component<{|
       svgRender(g, size, settings);
     }
     return (
-      <svg width={size} height={size}>
+      <svg width={size} height={size} className={this.props.className}>
         <Wrapper generator={svgGen} x={0} y={0} />
       </svg>
     );
@@ -43,6 +43,24 @@ function ButtonLink(props) {
 }
 
 const settings: { [string]: RenderSettings } = deepFreeze({
+  hero: {
+    pupil: 0.4,
+    rayWidth: 0.75,
+    nRays: 20,
+    backgroundColor: "#282d48",
+    baseColor: "#ffbc95",
+    midColor: "#e7a59a",
+    edgeColor: "#87738c",
+    pupilColor: "#111c27",
+    computes: [() => 0, () => 0, () => 0],
+    weights: [
+      { fixed: 0.375, variable: 0.0 },
+      { fixed: 1.0, variable: 0.0 },
+      { fixed: 1.0, variable: 0.0 },
+    ],
+    reverse: false,
+    animate: true,
+  },
   sectionDataDriven: {
     pupil: 0.35,
     rayWidth: 0.65,
@@ -166,7 +184,7 @@ export class Landing extends React.Component<{}> {
     return (
       <div className="container">
         <div>
-          <canvas id="logo-canvas"></canvas>
+          <MiniLogo size={350} settings={settings.hero} className="hero-logo" />
           <h1 id="topline">SourceCred</h1>
           <div id="tagline">
             <h2 className="tagline" id="tagline-top">
@@ -282,11 +300,6 @@ export class Landing extends React.Component<{}> {
         </div>
       </div>
     );
-  }
-
-  componentDidMount() {
-    const canvas: any = document.getElementById("logo-canvas");
-    canvasRender(canvas, defaultSettings());
   }
 }
 
